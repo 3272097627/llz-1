@@ -12,7 +12,7 @@ class CementProductionModel:
         self.converged = False # 收敛标志
         self.max_iterations = 1000 # 最大迭代次数
         self.convergence_threshold = 1e-4
-        self.dt = 0.01  # 时间步长
+        self.dt = 0.08  # 时间步长（平衡反应时间）
         self.dz = 1.0  # 空间步长
         
     def define_constants(self):
@@ -209,10 +209,10 @@ class CementProductionModel:
         # 反应速率系数
         self.constants['reaction_rate_coefficients'] = {
             'r1': {'kr': 1e8, 'n': 0, 'EA': 175.7, 'alpha1': 1, 'alpha2': 0, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},
-            'r2': {'kr': 1e7, 'n': 0, 'EA': 240, 'alpha1': 2, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},
-            'r3': {'kr': 1e9, 'n': 0, 'EA': 420, 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},
-            'r4': {'kr': 1e8, 'n': 0, 'EA': 310, 'alpha1': 3, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},
-            'r5': {'kr': 1e8, 'n': 0, 'EA': 330, 'alpha1': 4, 'alpha2': 1, 'alpha3': 1, 'beta2': 0, 'unit': 'kg/(m³·s)'},
+            'r2': {'kr': 1e9, 'n': 0, 'EA': 240, 'alpha1': 2, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},  # 从1e7提升到1e9
+            'r3': {'kr': 1e10, 'n': 0, 'EA': 420, 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},  # 从1e9提升到1e10
+            'r4': {'kr': 1e9, 'n': 0, 'EA': 310, 'alpha1': 3, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},   # 从1e8提升到1e9
+            'r5': {'kr': 1e9, 'n': 0, 'EA': 330, 'alpha1': 4, 'alpha2': 1, 'alpha3': 1, 'beta2': 0, 'unit': 'kg/(m³·s)'},   # 从1e8提升到1e9
             'r6': {'kr': 7.0e4, 'n': 0, 'EA': 66.5, 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
             'r7': {'kr': 2.8e6, 'n': 0, 'EA': 83.7, 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
             'r8': {'kr': 1.4e6, 'n': 0.5, 'EA': 295.5, 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
@@ -302,7 +302,7 @@ class CementProductionModel:
         
         # 1. 固体进料（生料）
         self.control_variables['solid_feed'] = {
-            'temperature': 390,  # K
+            'temperature': 600,  # K
             'total_rate': 120 / 3600,  # 总进料速率，kg/s
             'composition': {
                 'CaCO3': 0.78,  # 质量分数
@@ -316,7 +316,7 @@ class CementProductionModel:
         self.control_variables['gas_feed'] = {
             'total_rate': 4,  # 总风量，mol/s
             'initial_velocity': 0.084,  # 初始风速，m/s
-            'temperature': 800,  # K
+            'temperature': 1300,  # K （提升至 1300K）
             'composition': {
                 'O2': 0.21,  # 摩尔分数
                 'N2': 0.78,
@@ -1426,6 +1426,12 @@ class CementProductionModel:
             # 存储前一时刻核心变量用于收敛判断
             prev_core_vars = self._get_core_variables()
             
+            # 【关键修复】每个时间步开始时，先进行物料传递，确保浓度能够沿管道流动
+            # 从预热器→分解炉→回转窑，逐个单元传递浓度和热量
+            for i in range(len(self.cells) - 1):
+                # 所有相邻单元都进行物料转移（这样确保浓度沿着系统流动）
+                self._transfer_between_cells(self.cells[i], self.cells[i+1])
+            
             # 内层单元遍历循环：沿物料流动方向依次遍历所有有限体积单元
             for i, cell in enumerate(self.cells):
                 # ① 识别单元所属设备，根据单元索引获取单元所属的工艺区段
@@ -1455,13 +1461,7 @@ class CementProductionModel:
                 # ⑤ 同步更新：新值 = 原值 + 变化率 × Δt
                 # 同一个时间步 Δt 内，同一个单元里，代数计算和微分计算同时做，无先后顺序，结果互相代入
                 self._update_variables(cell, dC_dt, dU_dt)
-                
-                # ⑥ 连续传递：相邻单元通过通量公式更新边界值
-                if i < len(self.cells) - 1: #判断当前单元是否为最后一个单元
-                    self._transfer_between_cells(cell, self.cells[i+1]) #将当前单元的状态变量传递给下一个单元，作为下一个单元的边界条件
-            
-            # 3预热器入口按初始进料值「补料」，更新预热器第一个单元的物料浓度和温度
-            self._feed_preheater_inlet()
+
             
             # 单元边界衔接：确保三段工艺无缝衔接
             #将前一段工艺最后一个单元的变量传递给后一段工艺的第一个单元
@@ -2706,14 +2706,21 @@ class CementProductionModel:
         for component in clinker_components: #循环遍历熟料组分
             clinker_moles[component] = outlet_concentrations.get(component, 0.0)#获取组分浓度并存入字典
         
-        # 计算总摩尔数
-        total_moles = sum(clinker_moles.values())
+        # 计算所有固体组分的总摩尔浓度（相对于所有固体组分）
+        total_solid_moles = 0.0
+        for component in solid_components:
+            if component in outlet_concentrations:
+                total_solid_moles += outlet_concentrations[component]
+        
+        # 如果total_solid_moles为0，则使用clinker_moles的总和作为备选
+        if total_solid_moles == 0:
+            total_solid_moles = sum(clinker_moles.values())
         
         # 计算各组分占比
         clinker_ratio = {}
         for component in clinker_components: #循环遍历熟料组分
-            if total_moles > 0:
-                clinker_ratio[component] = (clinker_moles[component] / total_moles) * 100
+            if total_solid_moles > 0:
+                clinker_ratio[component] = (clinker_moles[component] / total_solid_moles) * 100
             else:
                 clinker_ratio[component] = 0.0
         
@@ -2722,13 +2729,21 @@ class CementProductionModel:
         print("出料口工艺指标")
         print("=" * 60)
         print(f"出口温度: {outlet_temperature:.2f} K")
-        print("\n熟料组分占比 (%):")
-        print(f"CaO: {clinker_ratio['CaO']:.2f}%")
-        print(f"C₂S: {clinker_ratio['C2S']:.2f}%")
-        print(f"C₃S: {clinker_ratio['C3S']:.2f}%")
-        print(f"C₃A: {clinker_ratio['C3A']:.2f}%")
-        print(f"C₄AF: {clinker_ratio['C4AF']:.2f}%")
-        print(f"\n总摩尔数: {total_moles:.6f} mol/m³")
+        
+        print("\n熟料及原料组分占比 (%):")
+        for component in solid_components:
+            ratio = clinker_ratio.get(component, 0)
+            if component in ['CaO', 'C2S', 'C3S', 'C3A', 'C4AF']:
+                print(f"{component} (熟料): {ratio:.2f}%")
+            else:
+                if component in outlet_concentrations:
+                    conc = outlet_concentrations[component]
+                    if total_solid_moles > 0:
+                        ratio = (conc / total_solid_moles) * 100
+                    else:
+                        ratio = 0.0
+                    print(f"{component} (原料): {ratio:.2f}%")
+        print(f"\n总固体摩尔浓度: {total_solid_moles:.6f} mol/m³")
         print("=" * 60)
 
 # 八、主运行模型
@@ -2750,6 +2765,11 @@ def main():
     
     # 初始进料设置，确保第一个单元有正确的初始值
     model._feed_preheater_inlet()
+    
+    # 【调试】打印进料后第一个单元的浓度
+    if model.cells:
+        first_cell = model.cells[0]
+        solid_components = model.constants['stoichiometric_matrix']['components'][:9]
     
     # 启动求解
     model.solve()
