@@ -123,9 +123,9 @@ class CementProductionModel:
                 'diffusion_volume': 18  # cm³
             },
             'C_sus': {
-                'thermal_conductivity': -1,  # 未提供
+                'thermal_conductivity': 0.1,  # W/(m·K)
                 'molar_mass': 12.011,  # g/mol
-                'viscosity': -1,  # 未提供
+                'viscosity': 1e-5,     # Pa·s
                 'diffusion_volume': 15.9  # cm³
             },
             'H2O': {
@@ -165,23 +165,23 @@ class CementProductionModel:
         # 标准生成焓
         self.constants['standard_enthalpy'] = {
             # 固体
-            'CaCO3': -1207.6,  # kJ/mol
-            'CaO': -634.92,  # kJ/mol
-            'SiO2': -910.94,  # kJ/mol
-            'Al2O3': -1675.7,  # kJ/mol
-            'Fe2O3': -825.50,  # kJ/mol
-            'C2S': -2256,  # kJ/mol
-            'C3S': -2881,  # kJ/mol
-            'C3A': -3582,  # kJ/mol
-            'C4AF': -4870,  # kJ/mol
+            'CaCO3': -1207.6 * 1000 ,  # kJ/mol
+            'CaO': -634.92 * 1000 ,  # kJ/mol
+            'SiO2': -910.94 * 1000 ,  # kJ/mol
+            'Al2O3': -1675.7 * 1000 ,  # kJ/mol
+            'Fe2O3': -825.50 * 1000 ,  # kJ/mol
+            'C2S': -2256 * 1000 ,  # kJ/mol
+            'C3S': -2881 * 1000 ,  # kJ/mol
+            'C3A': -3582 * 1000 ,  # kJ/mol
+            'C4AF': -4870 * 1000 ,  # kJ/mol
             # 气体
-            'CO2': -393.51,  # kJ/mol
+            'CO2': -393.51 * 1000 ,  # kJ/mol
             'N2': 0,  # kJ/mol
             'O2': 0,  # kJ/mol
             'Ar': 0,  # kJ/mol
-            'CO': -110.522,  # kJ/mol
-            'C_sus': 0,  # kJ/mol (未提供)
-            'H2O': -241.82,  # kJ/mol
+            'CO': -110.522 * 1000 ,  # kJ/mol
+            'C_sus': 0,  # kJ/mol 
+            'H2O': -241.82 * 1000 ,  # kJ/mol
             'H2': 0  # kJ/mol
         }
         
@@ -208,17 +208,17 @@ class CementProductionModel:
         
         # 反应速率系数
         self.constants['reaction_rate_coefficients'] = {
-            'r1': {'kr': 1e8, 'n': 0, 'EA': 175.7, 'alpha1': 1, 'alpha2': 0, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},
-            'r2': {'kr': 1e9, 'n': 0, 'EA': 240, 'alpha1': 2, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},  # 从1e7提升到1e9
-            'r3': {'kr': 1e10, 'n': 0, 'EA': 420, 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},  # 从1e9提升到1e10
-            'r4': {'kr': 1e9, 'n': 0, 'EA': 310, 'alpha1': 3, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},   # 从1e8提升到1e9
-            'r5': {'kr': 1e9, 'n': 0, 'EA': 330, 'alpha1': 4, 'alpha2': 1, 'alpha3': 1, 'beta2': 0, 'unit': 'kg/(m³·s)'},   # 从1e8提升到1e9
-            'r6': {'kr': 7.0e4, 'n': 0, 'EA': 66.5, 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
-            'r7': {'kr': 2.8e6, 'n': 0, 'EA': 83.7, 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
-            'r8': {'kr': 1.4e6, 'n': 0.5, 'EA': 295.5, 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
-            'r9': {'kr': 8.8e11, 'n': 0, 'EA': 239, 'alpha1': 0.5, 'alpha2': 0.5, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
-            'r10': {'kr': 2.6e8, 'n': 0, 'EA': 237, 'alpha1': 0, 'alpha2': 0, 'alpha3': 0, 'beta2': 0.6, 'unit': 's⁻¹'},
-            'r11': {'kr': 3.1e6, 'n': 0, 'EA': 215, 'alpha1': 0, 'alpha2': 0, 'alpha3': 0, 'beta2': 0.4, 'unit': 's⁻¹'}
+            'r1': {'kr': 1e8 * 1000 , 'n': 0, 'EA': 175.7 * 1000 , 'alpha1': 1, 'alpha2': 0, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},
+            'r2': {'kr': 1e9 * 1000 , 'n': 0, 'EA': 240 * 1000 , 'alpha1': 2, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},  # 从1e7提升到1e9
+            'r3': {'kr': 1e10 * 1000 , 'n': 0, 'EA': 420 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},  # 从1e9提升到1e10
+            'r4': {'kr': 1e9 * 1000 , 'n': 0, 'EA': 310 * 1000 , 'alpha1': 3, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'kg/(m³·s)'},   # 从1e8提升到1e9
+            'r5': {'kr': 1e9 * 1000 , 'n': 0, 'EA': 330 * 1000 , 'alpha1': 4, 'alpha2': 1, 'alpha3': 1, 'beta2': 0, 'unit': 'kg/(m³·s)'},   # 从1e8提升到1e9
+            'r6': {'kr': 7.0e4, 'n': 0, 'EA': 66.5 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
+            'r7': {'kr': 2.8e6, 'n': 0, 'EA': 83.7 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
+            'r8': {'kr': 1.4e6, 'n': 0.5, 'EA': 295.5 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
+            'r9': {'kr': 8.8e11, 'n': 0, 'EA': 239 * 1000 , 'alpha1': 0.5, 'alpha2': 0.5, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
+            'r10': {'kr': 2.6e8, 'n': 0, 'EA': 237 * 1000 , 'alpha1': 0, 'alpha2': 0, 'alpha3': 0, 'beta2': 0.6, 'unit': 's⁻¹'},
+            'r11': {'kr': 3.1e6, 'n': 0, 'EA': 215 * 1000 , 'alpha1': 0, 'alpha2': 0, 'alpha3': 0, 'beta2': 0.4, 'unit': 's⁻¹'}
         }
         
         # 化学反应式
@@ -276,16 +276,16 @@ class CementProductionModel:
         self.parameters['equipment'] = {
             'preheater': {
                 'length': 4,  # 长度，m
-                'segments': 2,  # 分段数量
+                'segments': 4,  # 分段数量
                 'radius': 1  # 半径，m
             },
             'calciner': {
-                'length': 10,  # 长度，m
+                'length': 5,  # 长度，m
                 'segments': 5,  # 分段数量
                 'radius': 1  # 半径，m
             },
             'kiln': {
-                'length': 14,  # 长度，m
+                'length': 7,  # 长度，m
                 'segments': 7,  # 分段数量
                 'radius': 1,  # 半径，m
                 'angle': math.radians(2)  # 倾角，rad
@@ -303,35 +303,36 @@ class CementProductionModel:
         # 1. 固体进料（生料）
         self.control_variables['solid_feed'] = {
             'temperature': 600,  # K
-            'total_rate': 120 / 3600,  # 总进料速率，kg/s
+            'total_rate': 666.7 * 1000  / 3600,  # 总进料速率，g/s
             'composition': {
-                'CaCO3': 0.78,  # 质量分数
+                'CaCO3': 0.76,  # 质量分数
                 'SiO2': 0.11,
                 'Al2O3': 0.03,
-                'Fe2O3': 0.02
+                'Fe2O3': 0.02,
+                'C2S': 0.02
             }
         }
         
         # 2. 气体进料（风）
         self.control_variables['gas_feed'] = {
-            'total_rate': 4,  # 总风量，mol/s
-            'initial_velocity': 0.084,  # 初始风速，m/s
+            'total_rate': 15,  # 总风量，mol/s
+            'initial_velocity': 0.5,  # 初始风速，m/s
             'temperature': 1300,  # K （提升至 1300K）
             'composition': {
                 'O2': 0.21,  # 摩尔分数
-                'N2': 0.78,
-                'H2O': 0.01
+                'N2': 0.70,
+                'H2O': 0.09
             }
         }
         
         # 3. 燃料量（煤粉）
         self.control_variables['fuel'] = {
-            'rate': 8 / 3600,  # 燃料速率，kg/s
+            'rate': 30 * 1000 / 3600,  # 燃料速率，g/s
             'composition': {
-                'fixed_carbon': 0.70,  # 质量占比
-                'volatile': 0.18,
-                'ash': 0.10,
-                'moisture': 0.02
+                'C_sus': 0.70,  # 质量占比
+                'CO': 0.18,
+                'CO2': 0.10,
+                'H2O': 0.02
             }
         }
         
@@ -436,9 +437,9 @@ class CementProductionModel:
             
             # 初始化代数变量
             # Tg: 气体温度向量，初始化为300K
-            self.variables['algebraic_variables']['Tg'].append(300.0)
+            self.variables['algebraic_variables']['Tg'].append(600.0)
             # Ts: 固体温度向量，初始化为300K
-            self.variables['algebraic_variables']['Ts'].append(300.0)
+            self.variables['algebraic_variables']['Ts'].append(1300.0)
             
             # P: 系统压力向量，初始化为标准大气压
             self.variables['algebraic_variables']['P'].append(self.constants['P0'])
@@ -451,14 +452,14 @@ class CementProductionModel:
         for i in range(total_segments): #再次遍历所有离散单元，构建单元字典并添加到cells列表
             # 计算每个单元的delta_z
             if i < preheater_segments:
-                # 预热器：长4m，分为2段
+                # 预热器：长4m，分为4段
                 delta_z = 4.0 / preheater_segments
             elif i < preheater_segments + calciner_segments:
-                # 分解炉：长10m，分为5段
-                delta_z = 10.0 / calciner_segments
+                # 分解炉：长5m，分为5段
+                delta_z = 5.0 / calciner_segments
             else:
-                # 回转窑：长14m，分为7段
-                delta_z = 14.0 / kiln_segments
+                # 回转窑：长7m，分为7段
+                delta_z = 7.0 / kiln_segments
             
             cell = {
                 'index': i, #存储单元索引（从 0 开始）
@@ -847,7 +848,7 @@ class CementProductionModel:
                     product_C *= C_i_dict[reactant] ** alpha3
         
         # 计算反应速率，将活化能EA从kJ/mol转换为J/mol以匹配气体常数R的单位
-        rj = kr * (T ** n) * math.exp(-(EA * 1000) / (R * T)) * product_P * product_C
+        rj = kr * (T ** n) * math.exp(-(EA) / (R * T)) * product_P * product_C
         return rj
     
     def formula_27(self):
@@ -1190,6 +1191,10 @@ class CementProductionModel:
             
             # 计算指数项
             exponent = -k * S_m * P * (xH2O + xCO2)
+            # 限制指数值范围，避免溢出
+            exponent = max(exponent, -700)  # math.exp(-700) 已经非常接近0
+            exponent = min(exponent, 700)   # math.exp(700) 会溢出，但这里应该是负数
+        
             
             # 累加计算气体发射率
             epsilon_g += a * (1 - math.exp(exponent))
@@ -1215,7 +1220,7 @@ class CementProductionModel:
         # 56入口边界初始化固体组分摩尔数
         # 输入：m˙i,s,0（入口固体组分i的质量流量）、Mi（固体组分i的摩尔质量）
         # 输出：ni,s,0（初始时刻（t=0）固体组分i的摩尔数）
-        return m_dot_i_s_0 / M_i
+        return m_dot_i_s_0  / M_i
     
     def formula_57(self, V_delta, C_i_s_t):
         # 57迭代过程固体组分摩尔数
@@ -2625,6 +2630,39 @@ class CementProductionModel:
                 C_i_g_0 = self.formula_60(mole_fraction, gas_pressure, gas_temp, R)
                 # 设置浓度
                 inlet_cell['state_variables']['C'][component] = C_i_g_0
+            # 燃料进料处理
+            fuel = self.control_variables['fuel']
+            fuel_rate = fuel['rate']  # g/s
+            fuel_composition = fuel['composition']
+            
+            # 计算燃料各成分的浓度
+            for component, mass_fraction in fuel_composition.items():
+                # 计算该组分的质量流量（总速率 × 质量分数）
+                mass_rate = fuel_rate * mass_fraction  # g/s
+                
+                # 获取摩尔质量
+                if component in self.constants['solid_properties']:
+                    molar_mass = self.constants['solid_properties'][component]['molar_mass']
+                elif component in self.constants['gas_properties']:
+                    molar_mass = self.constants['gas_properties'][component]['molar_mass']
+                else:
+                    # 使用平均摩尔质量
+                    molar_mass = 28.0  # g/mol，近似值
+                
+                # 计算摩尔流量
+                mole_rate = mass_rate / molar_mass  # mol/s
+                
+                # 计算浓度 (mol/m³) = 摩尔流量 / 体积流量
+                # 体积流量 = 气体进料速率 / 气体密度
+                # 使用单段总体积计算浓度
+                fuel_concentration = mole_rate / V_delta  # mol/m³
+                
+                # 添加到浓度字典中
+                if component in inlet_cell['state_variables']['C']:
+                    inlet_cell['state_variables']['C'][component] += fuel_concentration
+                else:
+                    inlet_cell['state_variables']['C'][component] = fuel_concentration
+ 
  
 #四、区段衔接处理方法 :处理预热器→分解炉、分解炉→回转窑的区段边界传递      
     def _handle_section_transitions(self):
