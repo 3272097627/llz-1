@@ -12,7 +12,7 @@ class CementProductionModel:
         self.converged = False # 收敛标志
         self.max_iterations = 1000 # 最大迭代次数
         self.convergence_threshold = 1e-4
-        self.dt = 0.001  # 时间步长（平衡反应时间）
+        self.dt = 0.08  # 时间步长（平衡反应时间）
         self.dz = 1.0  # 空间步长
         
     def define_constants(self):
@@ -2749,11 +2749,11 @@ class CementProductionModel:
                 delta_T = max(min(delta_T, step_limit), -step_limit)
                 
                 T_next = Tg - delta_T
+
+                if Tg <= 10.0 + 1e-3:
+                    print(f"警告：单元 {index} 气体温度收敛于下限 10.0 K，可能存在严重的能量平衡错误或热量耗尽！")
                 
-                # 唯一需要的硬约束：绝对零度
-                if T_next < 10.0:
-                    T_next = 10.0
-                    delta_T = Tg - T_next # 更新实际步长用于判断收敛
+                delta_T = Tg - T_next # 更新实际步长用于判断收敛
                 
                 Tg = T_next
                 
@@ -2785,11 +2785,10 @@ class CementProductionModel:
                 delta_T = max(min(delta_T, step_limit), -step_limit)
                 
                 T_next = Ts - delta_T
+                if Tg <= 10.0 + 1e-3:
+                    print(f"警告：单元 {index} 气体温度收敛于下限 10.0 K，可能存在严重的能量平衡错误或热量耗尽！")
                 
-                # 唯一需要的硬约束：绝对零度
-                if T_next < 10.0:
-                    T_next = 10.0
-                    delta_T = Ts - T_next # 更新实际步长用于判断收敛
+                delta_T = Ts - T_next # 更新实际步长用于判断收敛
                 
                 Ts = T_next
                 
