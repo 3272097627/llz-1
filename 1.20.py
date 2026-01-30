@@ -19,7 +19,7 @@ class CementProductionModel:
         # 定义固定常数
         # 物理常数
         self.constants['R'] = 8.314  # 气体常数，J/(mol·K)
-        self.constants['sigma'] = 5.67e-8  # 斯特藩-玻尔兹曼常数，W/(m²·K⁴)
+        self.constants['sigma'] = 5.67 * 1e-8  # 斯特藩-玻尔兹曼常数，W/(m²·K⁴)
         
         # 热力学标准条件
         self.constants['T0'] = 298.15  # 标准热力学温度，K
@@ -80,7 +80,7 @@ class CementProductionModel:
             },
             'C3A': {
                 'thermal_conductivity': 3.74,  # W/(K·m)
-                'density': 3.04 * 1e6,  # g/cm³
+                'density': 3.04 * 1e6 ,  # g/cm³
                 'molar_mass': 270.19  # g/mol
             },
             'C4AF': {
@@ -93,33 +93,33 @@ class CementProductionModel:
         # 气体物质属性
         self.constants['gas_properties'] = {
             'CO2': {
-                'thermal_conductivity': {300: 16.77, 1000: 70.78},  # 10⁻³ W/(K·m)
+                'thermal_conductivity': 70.78 * 1e-3,  # 10⁻³ W/(K·m)
                 'molar_mass': 44.01,  # g/mol
-                'viscosity': {300: 15.0, 1000: 41.18},  # μPa·s
+                'viscosity': 41.18,  # μPa·s
                 'diffusion_volume': 16.3 * 1e-6  # cm³
             },
             'N2': {
-                'thermal_conductivity': {300: 25.97, 1000: 65.36},  # 10⁻³ W/(K·m)
+                'thermal_conductivity': 65.36 * 1e-3,  # 10⁻³ W/(K·m)
                 'molar_mass': 28.014,  # g/mol
-                'viscosity': {300: 17.89, 1000: 41.54},  # μPa·s
+                'viscosity': 41.54,  # μPa·s
                 'diffusion_volume': 18.5 * 1e-6  # cm³
             },
             'O2': {
-                'thermal_conductivity': {300: 26.49, 1000: 71.55},  # 10⁻³ W/(K·m)
+                'thermal_conductivity': 71.55 * 1e-3,  # 10⁻³ W/(K·m)
                 'molar_mass': 31.998,  # g/mol
-                'viscosity': {300: 20.65, 1000: 49.12},  # μPa·s
+                'viscosity': 49.12,  # μPa·s
                 'diffusion_volume': 16.3 * 1e-6  # cm³
             },
             'Ar': {
-                'thermal_conductivity': {300: 17.84, 1000: 43.58},  # 10⁻³ W/(K·m)
+                'thermal_conductivity': 43.58 * 1e-3,  # 10⁻³ W/(K·m)
                 'molar_mass': 39.948,  # g/mol
-                'viscosity': {300: 22.74, 1000: 55.69},  # μPa·s
+                'viscosity': 55.69,  # μPa·s
                 'diffusion_volume': 16.2 * 1e-6  # cm³
             },
             'CO': {
-                'thermal_conductivity': {300: 25, 600: 43.2},  # 10⁻³ W/(K·m)
+                'thermal_conductivity': 43.2 * 1e-3,  # 10⁻³ W/(K·m)
                 'molar_mass': 28.010,  # g/mol
-                'viscosity': {300: 17.8, 1000: 29.1},  # μPa·s
+                'viscosity': 29.1,  # μPa·s
                 'diffusion_volume': 18 * 1e-6  # cm³
             },
             'C_sus': {
@@ -129,27 +129,28 @@ class CementProductionModel:
                 'diffusion_volume': 15.9 * 1e-6  # cm³
             },
             'H2O': {
-                'thermal_conductivity': {300: 609.50, 1000: 95.877},  # 10⁻³ W/(K·m)
+                'thermal_conductivity': 95.877 * 1e-3,  # 10⁻³ W/(K·m)
                 'molar_mass': 18.015,  # g/mol
-                'viscosity': {300: 853.74, 1000: 37.615},  # μPa·s
+                'viscosity': 37.615,  # μPa·s
                 'diffusion_volume': 13.1 * 1e-6  # cm³
             },
             'H2': {
-                'thermal_conductivity': {300: 193.1, 1000: 459.7},  # 10⁻³ W/(K·m)
+                'thermal_conductivity': 459.7 * 1e-3,  # 10⁻³ W/(K·m)
                 'molar_mass': 2.016,  # g/mol
-                'viscosity': {300: 8.938, 1000: 20.73},  # μPa·s
+                'viscosity': 20.73,  # μPa·s
                 'diffusion_volume': 6.12 * 1e-6  # cm³
             }
         }
         
         # 摩尔热容
         self.constants['molar_heat_capacity'] = {
+            'CaCO3': {'C0': 104.51, 'C1': 21.92 * 1e-3, 'C2': -25.94 * 1e-6, 'T_range': (298, 1800)},
             'CaO': {'C0': 71.69, 'C1': -3.08 * 1e-3, 'C2': 0.22 * 1e-5, 'T_range': (200, 1800)},
             'SiO2': {'C0': 58.91, 'C1': 5.02 * 1e-3, 'C2': 0, 'T_range': (844, 1800)},
             'Al2O3': {'C0': 233.004, 'C1': -19.59 * 1e-3, 'C2': 0.94 * 1e-5, 'T_range': (200, 1800)},
             'Fe2O3': {'C0': 103.9, 'C1': 0, 'C2': 0, 'T_range': (1650, 1800)},
-            'C2S': {'C0': 199.6, 'C1': -2.33 * 1e-3, 'C2': 0, 'T_range': (200, 1800)},
-            'C3S': {'C0': 333.92, 'C1': 0, 'C2': 0, 'T_range': (298, 1800)},
+            'C2S': {'C0': 199.6, 'C1': 0, 'C2': 0, 'T_range': (200, 1800)},
+            'C3S': {'C0': 333.92, 'C1': -2.33 * 1e-3, 'C2': 0, 'T_range': (298, 1800)},
             'C3A': {'C0': 260.58, 'C1': 9.58/2 * 1e-3, 'C2': 0, 'T_range': (298, 1800)},
             'C4AF': {'C0': 374.43, 'C1': 36.4 * 1e-3, 'C2': 0, 'T_range': (298, 1863)},
             'CO2': {'C0': 25.98, 'C1': 43.61 * 1e-3, 'C2': -1.49 * 1e-5, 'T_range': (298, 1500)},
@@ -240,7 +241,7 @@ class CementProductionModel:
         # 反应物系数为负，产物为正，常数
         # 组分顺序: CaCO3, CaO, SiO2, Al2O3, Fe2O3, C2S, C3S, C3A, C4AF, C_sus, CO2, CO, O2, H2O, H2
         self.constants['stoichiometric_matrix'] = {
-            'components': ['CaCO3', 'CaO', 'SiO2', 'Al2O3', 'Fe2O3', 'C2S', 'C3S', 'C3A', 'C4AF', 'C_sus', 'CO2', 'CO', 'O2', 'H2O', 'H2'],
+            'components': ['CaCO3', 'CaO', 'SiO2', 'Al2O3', 'Fe2O3', 'C2S', 'C3S', 'C3A', 'C4AF', 'C_sus', 'CO2', 'CO', 'O2', 'H2O', 'H2', 'N2'],
             'matrix': [
                 # r1  r2  r3  r4  r5  r6  r7  r8  r9  r10 r11
                 [-1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],  # CaCO3
@@ -257,7 +258,8 @@ class CementProductionModel:
                 [0,   0,  0,  0,  0, -2, -1,  0, +2, +1, +2],  # CO
                 [0,   0,  0,  0,  0, -1,  0, -1, -1,  0,  0],  # O2
                 [0,   0,  0,  0,  0,  0, -1, +2,  0, -1,  0],  # H2O
-                [0,   0,  0,  0,  0,  0, +1,  0,  0, +1,  0]   # H2
+                [0,   0,  0,  0,  0,  0, +1,  0,  0, +1,  0],   # H2
+                [0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0],  # N2
             ]
         }
     
@@ -276,20 +278,20 @@ class CementProductionModel:
         # 系统几何参数
         self.parameters['equipment'] = {
             'preheater': {
-                'length': 4,  # 长度，m
-                'segments': 4,  # 分段数量
-                'radius': 1  # 半径，m
+                'length': 1.5,  # 长度，m
+                'segments': 3,  # 分段数量
+                'radius': 0.08  # 半径，m
             },
             'calciner': {
-                'length': 5,  # 长度，m
-                'segments': 5,  # 分段数量
-                'radius': 1  # 半径，m
+                'length': 2.0,  # 长度，m
+                'segments': 4,  # 分段数量
+                'radius': 0.08  # 半径，m
             },
             'kiln': {
-                'length': 7,  # 长度，m
-                'segments': 7,  # 分段数量
-                'radius': 1,  # 半径，m
-                'angle': math.radians(2)  # 倾角，rad
+                'length': 2.5,  # 长度，m
+                'segments': 5,  # 分段数量
+                'radius': 0.08,  # 半径，m
+                'angle': math.radians(1)  # 倾角，rad
             }
         }
         
@@ -304,11 +306,11 @@ class CementProductionModel:
         # 1. 固体进料（生料）
         self.control_variables['solid_feed'] = {
             'temperature': 600,  # K
-            'total_rate': 666.7 * 1000  / 3600,  # 总进料速率，g/s
+            'total_rate': 100.0 ,  # 总进料速率，g/s
             'composition': {
                 'CaCO3': 0.76,  # 质量分数
                 'SiO2': 0.11,
-                'Al2O3': 0.03,
+                'Al2O3': 0.04,
                 'Fe2O3': 0.02,
                 'C2S': 0.02
             }
@@ -316,29 +318,34 @@ class CementProductionModel:
         
         # 2. 气体进料（风）
         self.control_variables['gas_feed'] = {
-            'total_rate': 15,  # 总风量，mol/s
+            'temperature': 1300,  # K
+            'total_rate': 0.1,  # 总风量，mol/s
             'initial_velocity': 0.5,  # 初始风速，m/s
-            'temperature': 1300,  # K （提升至 1300K）
             'composition': {
-                'O2': 0.21,  # 摩尔分数
-                'N2': 0.70,
-                'H2O': 0.09
+                'O2': 0.18,  # 摩尔分数
+                'N2': 0.65,
+                'CO2': 0.05,
+                'H2O': 0.02
             }
         }
         
         # 3. 燃料量（煤粉）
         self.control_variables['fuel'] = {
-            'rate': 30 * 1000 / 3600,  # 燃料速率，g/s
+            'rate': 1.5,  # 燃料速率，g/s
             'composition': {
                 'C_sus': 0.70,  # 质量占比
-                'CO': 0.18,
-                'CO2': 0.10,
-                'H2O': 0.02
+                'SiO2': 0.06,    # 灰分中SiO2
+                'Al2O3': 0.05,   # 灰分中Al2O3
+                'Fe2O3': 0.04,   # 灰分中Fe2O3
+                'CaO': 0.03,    # 灰分中CaO
+                'H2O': 0.06,
+                'CO': 0.02,     
+                'H2': 0.02,      
             }
         }
         
         # 4. 窑转速
-        self.control_variables['omega'] = 0.4189  # 窑转速，rad/s
+        self.control_variables['omega'] = 0.2  # 窑转速，rad/s
         
         # 5. 操作参数
         self.control_variables['excess_air_ratio'] = 1.1  # 空气过剩系数
@@ -350,7 +357,7 @@ class CementProductionModel:
         self.section_configs['preheater'] = {
             'energy_eq': None,  # 无反应和公式
             'reactions': None,  # 无反应
-            'solid_velocity': 0.4,  # 固相流速为0
+            'solid_velocity': 0.4,  # 固相流速为0.4
             'gas_velocity': 'given_parameter',  # 气相流速为给定参数
             'heat_transfer': None,  # 无需对流换热计算
             'internal_energy_constraint': None,  # 无需内能密度约束
@@ -399,7 +406,9 @@ class CementProductionModel:
             # 状态变量 (向量形式：x=[C, U^]^T)
             'state_variables': {
                 'C': [],  # 各相组分浓度向量，每个元素包含该段的所有组分浓度
-                'U_hat': []  # 单位体积内能向量，每个元素包含该段的内能密度
+                # 【新增】分别存储气固内能，供分相温度求解器使用
+                'U_g': [], 
+                'U_s': []
             },
             
             # 代数变量 (向量形式：y=[Tg, Ts, P]^T)
@@ -407,9 +416,8 @@ class CementProductionModel:
                 'Tg': [],  # 气体温度向量，每个元素包含该段的气体温度
                 'Ts': [],  # 固体温度向量，每个元素包含该段的固体温度
                 'P': [],  # 系统压力向量，每个元素包含该段的压力
-                # 【新增】分别存储气固内能，供分相温度求解器使用
-                'U_g': [], 
-                'U_s': []
+                'U_hat': []  # 总内能改为代数变量，仅用于记录或输出
+                
             },
             
             # 设备类型标识，用于确定每个段所属的设备
@@ -419,20 +427,28 @@ class CementProductionModel:
         # 获取所有组分名称
         #从化学计量矩阵中获取所有组分名称，用于后续初始化各单元的浓度字典
         components = self.constants['stoichiometric_matrix']['components']
-        
-        # 1. 气体初始化参数 (空气环境)
-        init_gas_temp = 600.0 
+        solid_comps = components[:9]
+        gas_comps = components[9:]
+
+        # 1. 定义初始化基础热力学条件
+        init_gas_temp = self.control_variables['gas_feed']['temperature'] # 使用气体进料温度 
+        init_solid_temp = self.control_variables['solid_feed']['temperature'] # 使用固体进料温度 [cite: 54]
+        P_init = self.constants['P0']
+        T0 = self.constants['T0']
         R = self.constants['R']
-        P0 = self.constants['P0']
-        # 计算总气体摩尔浓度 P = CRT => C = P/RT
-        c_gas_total_init = P0 / (R * init_gas_temp)
+        # 2. 获取进料组分与流率参数 (生料 + 气体 + 燃料)
+        solid_feed = self.control_variables['solid_feed']
+        gas_feed = self.control_variables['gas_feed']
+        fuel_feed = self.control_variables['fuel']
+        # 3. 从 configure_sections 获取速度参数用于初始化计算
+        # 获取预热器配置
+        preheater_config = self.section_configs.get('preheater', {})
         
-        # 2. 固体初始化参数 (生料铺底)
-        # 获取固体进料配比 (质量分数)
-        feed_composition = self.control_variables['solid_feed']['composition']
-        # 设定一个初始的固体堆积密度 (kg/m³) 用于初始化
-        # 为了防止热震荡，不能设为0。假设初始时刻窑内有少量物料 (例如 50 kg/m³)
-        init_solid_bulk_density = 50.0
+        # A. 获取固相速度参考值 (用于计算驻留时间)
+        v_s_ref = preheater_config.get('solid_velocity', 0.4) 
+        
+        # B. 获取气相速度参考值
+        v_g_ref = self.control_variables['gas_feed'].get('initial_velocity', 0.5) 
 
         # 初始化每个分段的变量
         for i in range(total_segments):
@@ -444,119 +460,211 @@ class CementProductionModel:
             else:
                 device = 'kiln'
             
+            # 获取当前段的空间步长
+            if device == 'preheater':
+                 dz = self.parameters['equipment']['preheater']['dz']
+            elif device == 'calciner':
+                 dz = self.parameters['equipment']['calciner']['dz']
+            else:
+                 dz = self.parameters['equipment']['kiln']['dz']
+            
+            # 获取设备半径并计算截面积 (公式17)
+            radius = self.parameters['equipment'][device]['radius']
+            A_t = self.formula_17(radius)
+            
+            # 计算单段总体积 (公式58)
+            V_delta = self.formula_58(A_t, dz)
+
             # 初始化状态变量 C (浓度)
             segment_C = {}
-            
+
+            # --- 气体组分初始化 ---
             for component in components:
-                # --- 气体组分初始化 (填充空气) ---
-                if component == 'N2':
-                    segment_C[component] = 0.79 * c_gas_total_init
-                elif component == 'O2':
-                    segment_C[component] = 0.21 * c_gas_total_init
-                elif component in self.constants['gas_properties']:
-                    # 其他气体 (CO2, H2O等) 保持痕量
-                    segment_C[component] = 1e-12
-                
-                # --- 固体组分初始化 (填充生料) ---
-                elif component in feed_composition:
-                    # 如果是原料 (CaCO3, SiO2...)，根据进料配比初始化
-                    # 摩尔浓度 = (堆积密度 * 质量分数) / 摩尔质量
-                    mass_fraction = feed_composition[component]
-                    molar_mass = self.constants['solid_properties'][component]['molar_mass'] # g/mol
-                    # 注意单位换算: density是kg/m³, molar_mass是g/mol
-                    # mol/m³ = (kg/m³ * 1000 g/kg) / (g/mol)
-                    conc = (init_solid_bulk_density * 1000 * mass_fraction) / molar_mass
+                # 特殊处理燃料中的悬浮组分 (如 C_sus) 
+                # 虽然 C_sus 在 components[9:] 即 gas_comps 中，初始化需基于燃料进料速率计算
+                if component == 'C_sus':
+                    # 获取燃料中的质量分数
+                    fuel_mass_frac = fuel_feed['composition'].get(component, 0.0)
+                    mass_rate = fuel_feed['rate'] * fuel_mass_frac
+                    if mass_rate > 0:
+                        # 获取摩尔质量 (C_sus 属性定义在 gas_properties 中)
+                        molar_mass = self.constants['gas_properties'][component]['molar_mass']
+                        
+                        # 计算摩尔流率 (mol/s)
+                        n_dot_i = self.formula_56(mass_rate, molar_mass)
+                        # 计算驻留摩尔数 n = rate * time
+                        # 关键点：悬浮碳随气流运动，故使用气相速度 v_g_ref
+                        n_resident_i = n_dot_i * (dz / v_g_ref)
+                        # 计算浓度
+                        conc = self.formula_59(V_delta, n_resident_i)
+                        segment_C[component] = conc
+                    else:
+                        segment_C[component] = 1e-12
+                elif component in gas_comps:
+                    # A. 基础气体进料
+                    # 获取摩尔分数 
+                    gas_total_molar_rate = gas_feed['total_rate'] # mol/s
+                    gas_mole_frac = gas_feed['composition'].get(component, 0.0)
+                    rate_from_gas = gas_total_molar_rate * gas_mole_frac # mol/s
+                    # B.燃料中的气体成分 
+                    fuel_total_mass_rate = fuel_feed['rate'] # g/s
+                    fuel_mass_frac = fuel_feed['composition'].get(component, 0.0)
+
+                    rate_from_fuel = 0.0
+                    if fuel_mass_frac > 0:
+                        # 获取摩尔质量 (g/mol)
+                        molar_mass = self.constants['gas_properties'][component]['molar_mass']
+
+                        # 【关键换算】 质量流率 (g/s) / 摩尔质量 (g/mol) = 摩尔流率 (mol/s)
+                        # 使用 formula_56 进行换算
+                        mass_rate_i = fuel_total_mass_rate * fuel_mass_frac
+                        rate_from_fuel = self.formula_56(mass_rate_i, molar_mass)
+
+                    # 3. 合并总摩尔流率
+                    total_molar_rate_i = rate_from_gas + rate_from_fuel
+
+                    # 4. 计算浓度
+                    # 逻辑：浓度 = 摩尔流率 / 体积流率 = n_dot / (A * v)
+                    if total_molar_rate_i > 0 and v_g_ref > 0:
+                        # 驻留摩尔数 = 流率 * 驻留时间 = n_dot * (dz / v)
+                        n_resident = total_molar_rate_i * (dz / v_g_ref)
+
+                        # 浓度 = n / V
+                        conc = self.formula_59(V_delta, n_resident)
+                    else:
+                        conc = self.formula_60(1e-12, P_init, init_gas_temp, R)
+
                     segment_C[component] = conc
                 
-                # --- 产物/中间体初始化 (痕量) ---
-                else:
-                    # 熟料矿物 (C2S, C3S...) 和中间产物 (CaO...) 初始为0
-                    segment_C[component] = 1e-12
+                # --- 固体组分初始化  ---
+                elif component in solid_comps:
+                    # 1. 计算生料贡献
+                    feed_mass_frac = solid_feed['composition'].get(component, 0.0)
+                    mass_rate_feed = solid_feed['total_rate'] * feed_mass_frac
+                    # 2. 计算燃料贡献 
+                    fuel_mass_frac = fuel_feed['composition'].get(component, 0.0)
+                    mass_rate_fuel = fuel_feed['rate'] * fuel_mass_frac
+                    # 3. 总质量流率
+                    total_mass_rate_i = mass_rate_feed + mass_rate_fuel
+
+                    if total_mass_rate_i > 0:
+                        # 获取摩尔质量
+                        molar_mass = self.constants['solid_properties'][component]['molar_mass']
+                        
+                        # 使用公式56计算摩尔流率 (mol/s)
+                        n_dot_i = self.formula_56(total_mass_rate_i, molar_mass)
+                        
+                        # 4. 计算单元内的摩尔数n = rate * time = rate * dz/v
+                        n_resident_i = n_dot_i * (dz / v_s_ref)
+         
+                        # 5. 使用公式59计算摩尔浓度 (mol/m³)
+                        # C = n / V
+                        conc = self.formula_59(V_delta, n_resident_i)
+                        segment_C[component] = conc
+                    else:
+                        segment_C[component] = 1e-12
             
             self.variables['state_variables']['C'].append(segment_C)
             
-            #将当前单元的初始内能密度添加到全局状态变量的U_hat列表中
-            #self.variables['state_variables']['U_hat'].append(0.0)
-            # 1. 定义初始状态
-            current_Tg = init_gas_temp  # 600.0 K
-            current_Ts = 1300.0         # 1300.0 K (固体初始温度)
-            current_P = self.constants['P0']
-            T0 = self.constants['T0']
+            #初始内能计算 
+            # 1. 准备固体计算数据 (摩尔数、焓、积分焓)
+            Hf_s_list = []      # 标准生成焓列表
+            n_s_list = []       # 驻留摩尔数列表 (用于计算总焓)
+            int_h_s_list = []   # 积分焓列表
             
-            # 2. 分离固气组分
-            solid_comps = components[:9]
-            gas_comps = components[9:]
-            
-            # 3. 计算固体总焓密度 (H_hat_s) 和 固体体积分数
-            H_hat_s = 0.0
-            V_s_fraction = 0.0
+            # 辅助字典用于体积计算
+            solid_moles_dict = {} 
             
             for comp in solid_comps:
-                if comp in segment_C:
-                    conc = segment_C[comp]
-                    if conc > 1e-15:
-                        # (1) 计算积分焓
-                        if comp in self.constants['molar_heat_capacity']:
-                            coeffs = self.constants['molar_heat_capacity'][comp]
-                            integral_h = self.formula_5(coeffs['C0'], coeffs['C1'], coeffs['C2'], T0, current_Ts)
-                        else:
-                            integral_h = 0.0
-                        # (2) 标准生成焓
-                        Hf = self.constants['standard_enthalpy'].get(comp, 0.0)
-                        # (3) 累加焓密度
-                        H_hat_s += conc * (Hf + integral_h)
-                        
-                        # (4) 累加体积分数 (用于计算 Vg)
-                        if comp in self.constants['solid_properties']:
-                            props = self.constants['solid_properties'][comp]
-                            # density在constants中单位需确认，此处假设已转换为 g/m³ 或与 molar_mass (g/mol) 匹配
-                            # 如果 props['density'] 是 2.71e6 (g/m³)，则 molar_mass/density = m³
-                            if props['density'] > 0:
-                                V_s_fraction += conc * (props['molar_mass'] / props['density'])
+                conc = segment_C.get(comp, 0.0)
+                # 反向计算驻留摩尔数: n = C * V_delta (调用formula_57)
+                n_i = self.formula_57(V_delta, conc)
+                n_s_list.append(n_i)
+                solid_moles_dict[comp] = n_i 
+                
+                # 获取标准生成焓
+                Hf = self.constants['standard_enthalpy'].get(comp, 0.0)
+                Hf_s_list.append(Hf)
+                
+                # 计算积分焓 (公式5)
+                if comp in self.constants['molar_heat_capacity']:
+                    coeffs = self.constants['molar_heat_capacity'][comp]
+                    int_h = self.formula_5(coeffs['C0'], coeffs['C1'], coeffs['C2'], T0, init_solid_temp)
+                else:
+                    int_h = 0.0
+                int_h_s_list.append(int_h)
 
-            # 4. 计算气体总焓密度 (H_hat_g)
-            H_hat_g = 0.0
-            for comp in gas_comps:
-                if comp in segment_C:
-                    conc = segment_C[comp]
-                    if conc > 1e-15:
-                        # 积分焓 (使用 Tg)
-                        if comp in self.constants['molar_heat_capacity']:
-                            coeffs = self.constants['molar_heat_capacity'][comp]
-                            integral_h = self.formula_5(coeffs['C0'], coeffs['C1'], coeffs['C2'], T0, current_Tg)
-                        else:
-                            integral_h = 0.0
-                        Hf = self.constants['standard_enthalpy'].get(comp, 0.0)
-                        H_hat_g += conc * (Hf + integral_h)
-
-            # 5. 计算气体体积分数 (用于 PV 项)
-            V_g_fraction = 1.0 - V_s_fraction
-            if V_g_fraction < 1e-6: V_g_fraction = 1e-6
-
-            # 6. 分别计算初始 U_g 和 U_s
-            # 公式 2: U_g = H_g - P * V_g
-            U_g_init = H_hat_g - current_P * V_g_fraction 
-            # 公式 3: U_s = H_s
-            U_s_init = H_hat_s                            
+            # 2. 准备气体计算数据
+            Hf_g_list = []
+            n_g_list = []
+            int_h_g_list = []
+            gas_moles_dict = {}
             
-            # 计算总内能
-            U_hat_init = U_g_init + U_s_init
+            for comp in gas_comps:
+                conc = segment_C.get(comp, 0.0)
+                n_i = self.formula_57_gas(V_delta, conc)
+                n_g_list.append(n_i)
+                gas_moles_dict[comp] = n_i 
+                
+                Hf = self.constants['standard_enthalpy'].get(comp, 0.0)
+                Hf_g_list.append(Hf)
+                
+                if comp in self.constants['molar_heat_capacity']:
+                    coeffs = self.constants['molar_heat_capacity'][comp]
+                    int_h = self.formula_5(coeffs['C0'], coeffs['C1'], coeffs['C2'], T0, init_gas_temp)
+                else:
+                    int_h = 0.0
+                int_h_g_list.append(int_h)
+
+            # 3. 计算总焓 (公式4)
+            H_total_s = self.formula_4(Hf_s_list, n_s_list, int_h_s_list)
+            H_total_g = self.formula_4(Hf_g_list, n_g_list, int_h_g_list)
+            
+            # 4. 计算单位体积焓 (公式63, 64)
+            H_hat_s = self.formula_63(H_total_s, V_delta)
+            H_hat_g = self.formula_64(H_total_g, V_delta)
+            
+            # 5. 计算体积和体积分数 (用于内能计算中的PV项)
+            # 准备公式8需要的参数字典
+            solid_M = {c: self.constants['solid_properties'][c]['molar_mass'] for c in solid_comps if c in self.constants['solid_properties']}
+            solid_rho = {c: self.constants['solid_properties'][c]['density'] for c in solid_comps if c in self.constants['solid_properties']}
+            
+            # 计算固体体积 (公式8)
+            V_s = self.formula_8(solid_M, solid_rho, solid_moles_dict)
+            
+            # 计算气体体积 (公式7)
+            V_g = self.formula_7(R, init_gas_temp, P_init, gas_moles_dict)
+            
+            # 计算体积分数 (公式66, 67)
+            V_s_fraction = self.formula_66(V_s, V_delta)
+            V_g_fraction = self.formula_67(V_g, V_delta)
+            
+            # 简单的归一化保护 (防止数值误差导致 > 1)
+            total_frac = V_s_fraction + V_g_fraction
+            V_s_fraction /= total_frac
+            V_g_fraction /= total_frac
+
+            # 6. 计算内能密度 (公式2, 3)
+            # 气体内能密度 U_g = H_hat_g - P * V_g_fraction
+            U_g_init = self.formula_2(P_init, H_hat_g, V_g_fraction)
+            # 固体内能密度 U_s = H_hat_s
+            U_s_init = self.formula_3(H_hat_s)
             
             # 7. 存储到全局变量
-            self.variables['state_variables']['U_hat'].append(U_hat_init)
+            self.variables['algebraic_variables']['U_hat'].append(U_g_init + U_s_init)
             
             # 【关键】分别存储初始 U_g 和 U_s 到全局代数变量列表
-            self.variables['algebraic_variables']['U_g'].append(U_g_init)
-            self.variables['algebraic_variables']['U_s'].append(U_s_init)
+            self.variables['state_variables']['U_g'].append(U_g_init)
+            self.variables['state_variables']['U_s'].append(U_s_init)
                    
             
             # 初始化代数变量
-            # Tg: 气体温度向量，初始化为300K
+            # Tg: 气体温度向量初始化
             self.variables['algebraic_variables']['Tg'].append(init_gas_temp)
-            # Ts: 固体温度向量，初始化为300K
-            self.variables['algebraic_variables']['Ts'].append(1300.0)
+            # Ts: 固体温度向量初始化
+            self.variables['algebraic_variables']['Ts'].append(init_solid_temp)
             
-            # P: 系统压力向量，初始化为标准大气压
+            # P: 系统压力向量初始化
             self.variables['algebraic_variables']['P'].append(self.constants['P0'])
             
             # 记录设备类型
@@ -567,14 +675,14 @@ class CementProductionModel:
         for i in range(total_segments): #再次遍历所有离散单元，构建单元字典并添加到cells列表
             # 计算每个单元的delta_z
             if i < preheater_segments:
-                # 预热器：长4m，分为2段
-                delta_z = 4.0 / preheater_segments
+                # 预热器：长4m，分为3段
+                delta_z = 1.5 / preheater_segments
             elif i < preheater_segments + calciner_segments:
-                # 分解炉：长10m，分为5段
-                delta_z = 5.0 / calciner_segments
+                # 分解炉：长10m，分为4段
+                delta_z = 2.0 / calciner_segments
             else:
-                # 回转窑：长14m，分为7段
-                delta_z = 7.0 / kiln_segments
+                # 回转窑：长14m，分为5段
+                delta_z = 2.5 / kiln_segments
             
             cell = {
                 'index': i, #存储单元索引（从 0 开始）
@@ -582,19 +690,21 @@ class CementProductionModel:
                 'delta_z': delta_z,
                 'state_variables': { #单元的状态变量子字典
                     'C': self.variables['state_variables']['C'][i], #引用全局C列表中当前单元的浓度字典
-                    'U_hat': self.variables['state_variables']['U_hat'][i]
+                    'U_g': self.variables['state_variables']['U_g'][i],
+                    'U_s': self.variables['state_variables']['U_s'][i]
                 },
                 'algebraic_variables': { #单元的代数变量子字典
                     'Tg': self.variables['algebraic_variables']['Tg'][i],
                     'Ts': self.variables['algebraic_variables']['Ts'][i],
-                    'P': self.variables['algebraic_variables']['P'][i]
+                    'P': self.variables['algebraic_variables']['P'][i],
+                    'U_hat': self.variables['algebraic_variables']['U_hat'][i]
                 }
             }
             self.cells.append(cell) #将当前单元字典添加到cells列表中
         
         print(f"空间离散完成：{total_segments} 个单元，其中预热器 {preheater_segments} 个，分解炉 {calciner_segments} 个，回转窑 {kiln_segments} 个")
     
-    # 通用计算子函数库 - 仅定义公式签名，不实现具体内容
+    # 通用计算子函数库 
     # 基础定义与代数约束方程
     def formula_1(self, V_hat_g, V_hat_s):
         # 1气体与固体体积分数守恒
@@ -639,46 +749,26 @@ class CementProductionModel:
     
     def formula_7(self, R, T, P, n_i):
         # 7气体体积计算
-        # 输入：R（气体常数，常数）、T（温度，变量）、P（压力，变量）、ni（各组分摩尔数列表/字典，变量，公式57输出）
+        # 输入：R（气体常数，常数）、T（温度，变量）、P（压力，变量）、n_i（各组分摩尔数字典,公式57输出）
         # 输出：Vg（气体体积）
         # 公式：V_g = (RT/P) * Σn_i
-        total_moles = sum(n_i.values()) if isinstance(n_i, dict) else sum(n_i)
+        total_moles = sum(n_i.values())
         return (R * T / P) * total_moles
     
     def formula_8(self, M_i, rho_i, n_i):
         # 8固体体积计算
-        # 输入：Mi（各组分摩尔质量列表/字典，常数）、ρi（各组分密度列表/字典，常数）、ni（各组分摩尔数列表/字典，变量，公式57输出）
+        # 输入：M_i（摩尔质量字典）、rho_i（密度字典）、n_i（摩尔数字典）
         # 输出：Vs（固体体积）
-        # 公式：V_s = Σ(M_i/ρ_i)n_i
+        # 公式：V_s = Σ (n_i * M_i / ρ_i)
         total_volume = 0.0
-        
-        # 辅助函数：获取数值，如果是列表则取第一个元素
-        def get_value(val):
-            if isinstance(val, list) and len(val) > 0:
-                return val[0]
-            return val
-        
-        if isinstance(M_i, dict) and isinstance(rho_i, dict) and isinstance(n_i, dict):
-            # 所有输入都是字典，遍历共同的组分
-            for component in M_i:
-                if component in rho_i and component in n_i:
-                    m = get_value(M_i[component])
-                    rho = get_value(rho_i[component])
-                    n = get_value(n_i[component])
-                    total_volume += (m / rho) * n
-        elif hasattr(M_i, '__iter__') and hasattr(rho_i, '__iter__') and hasattr(n_i, '__iter__'):
-            # 所有输入都是可迭代对象，按顺序遍历
-            for M, rho, n in zip(M_i, rho_i, n_i):
-                m = get_value(M)
-                rho_val = get_value(rho)
-                n_val = get_value(n)
-                total_volume += (m / rho_val) * n_val
-        else:
-            # 单个组分情况
-            m = get_value(M_i)
-            rho_val = get_value(rho_i)
-            n_val = get_value(n_i)
-            total_volume += (m / rho_val) * n_val
+        # 直接遍历摩尔数字典进行累加
+        for comp, n in n_i.items():
+            # 确保该组分在属性字典中存在且密度有效
+            if comp in M_i and comp in rho_i:
+                rho = rho_i[comp]
+                # V = (n * M) / rho
+                total_volume += (n * M_i[comp]) / rho
+                    
         return total_volume
     
     # 流动与传输方程
@@ -693,9 +783,12 @@ class CementProductionModel:
         # 10气体轴向速度
         # 输入：DH（公式9输出）、μg（气体粘度，常数）、ρg（气体密度，公式11输出）、∂zP（压力轴向梯度，公式63输出）
         # 输出：vg（气体速度）
-        # 公式：vg = (2 / 0.316) * (DH^5 * |dP/dz| / (mu_g * rho_g^3))^(1/7)
-        term = (DH**5 * abs(dP_dz)) / (mu_g * rho_g**3)
-        return (2 / 0.316) * (term ** (1/7))
+        # 公式：：vg = ((2 / 0.316) * (DH^5 * / (mu_g * rho_g^3))^(1/4) * ∂zP)^(4/7)
+        root_content = (DH**5) / (mu_g * rho_g**3)
+        root_term = root_content ** 0.25
+        inner_term = (2 / 0.316) * root_term * abs(dP_dz)
+        vg = inner_term ** (4/7)
+        return vg
     
     def formula_11(self, M_i, C_i_g):
         # 11气体密度计算
@@ -730,7 +823,7 @@ class CementProductionModel:
         # 输入：ω（窑转速，控制量）、ψ（窑倾角）、ξ（公式10输出）、rc（窑内半径，参数）、Lc（弦长，公式14输出）、ϕ(z)（床层坡度角，公式73输出）
         # 输出：vs（固体速度）
         # 公式：vs = ω * (ψ + phi_z * cos(xi)) / sin(xi) * (2*rc / sin(Lc/(2*rc)))
-        return omega * (psi + phi_z * math.cos(xi)) / math.sin(xi) * (2 * r_c / math.sin(Lc / (2 * r_c)))
+        return omega * ((psi + phi_z * math.cos(xi)) / math.sin(xi)) * ((2 * r_c / math.sin(Lc / (2 * r_c))))
     
     def formula_14(self, r_c, theta_z):
         # 14弦长
@@ -738,12 +831,6 @@ class CementProductionModel:
         # 输出：Lc（弦长）
         # 公式：Lc = 2 * r_c * math.sin(theta_z / 2)
         return 2 * r_c * math.sin(theta_z / 2)
-    
-    def formula_15(self, V_delta, C_i_g_t):
-        # 15迭代过程气体组分摩尔数
-        # 输入：VΔ（窑炉单段总体积）、Ci,g(t)（t时刻气体组分i的摩尔浓度）
-        # 输出：ni,g(t)（t时刻气体组分i的摩尔数）
-        return C_i_g_t * V_delta
     
     def formula_16(self, r_c, theta_z):
         # 16固体横截面积
@@ -766,48 +853,35 @@ class CementProductionModel:
         # 公式：η = (θ - sinθ)/(2π)
         return (theta - math.sin(theta)) / (2 * math.pi)
     
-    def _calculate_fill_angle(self, A_s, A_t, eta):
+    def _calculate_fill_angle(self, eta):
         # 辅助函数：使用牛顿迭代法求解填充角
         # 输入：As（固体横截面积）、At（窑总横截面积）、η（填充因子）
         # 输出：θ(z)（填充角）
         # 公式：η = A_s / A_t = (θ - sinθ)/(2π)
         
-        # 1. 确定使用的填充率
-        if eta is None or eta < 0:
-            # 计算实际填充率
-            if A_t == 0:
-                return 0.0
-            actual_eta = A_s / A_t
-        else:
-            # 使用传入的填充率
-            actual_eta = eta
-        
-        # 2. 使用牛顿迭代法求解填充角 θ
         # 定义函数 f(θ) = (θ - sinθ)/(2π) - η = 0
         # 导数 f'(θ) = (1 - cosθ)/(2π)
         
         # 初始猜测值
         theta = math.pi  # 初始猜测为180度
         tolerance = 1e-6  # 收敛容差
-        max_iter = 100  # 最大迭代次数
+        max_iter = 20  # 最大迭代次数
         
         for i in range(max_iter):
-            # 计算f(theta)
-            f_theta = (theta - math.sin(theta)) / (2 * math.pi) - actual_eta
+            # 计算 f(theta) 和 f'(theta)
+            # 这里的 2*pi 分母在迭代式中可以约去，求解 theta - sin(theta) - 2*pi*eta = 0
+            f_val = theta - math.sin(theta) - 2 * math.pi * eta
+            df_val = 1 - math.cos(theta)
             
-            # 计算f'(theta)
-            df_dtheta = (1 - math.cos(theta)) / (2 * math.pi)
-            
-            # 检查导数是否为0
-            if abs(df_dtheta) < 1e-10:
+            # 防止导数为0 (theta接近0或2pi时)
+            if abs(df_val) < 1e-9:
                 break
-            
-            # 牛顿迭代更新
-            delta_theta = -f_theta / df_dtheta
-            theta += delta_theta
+                
+            delta = f_val / df_val
+            theta -= delta
             
             # 检查收敛
-            if abs(delta_theta) < tolerance:
+            if abs(delta) < tolerance:
                 break
         
         # 3. 返回计算得到的填充角
@@ -824,8 +898,8 @@ class CementProductionModel:
         # 20气体热导率
         # 输入：T（气体温度）
         # 输出：kg（气体热导率）
-        # 公式：kg = 0.026 * (T / 300)**0.8
-        return 0.026 * (T / 300)**0.8
+        # 公式：kg = 0.024 + 4.6 * 1e-5*T
+        return 0.024 + 4.6 * 1e-5 * T
     
     def formula_21(self, vg, C_i_g, Tg, P, components, xj, cg, dC_i_g_dz, i):
         # 21气体组分i物质通量
@@ -881,7 +955,7 @@ class CementProductionModel:
         # 输出：Dij（二元扩散系数）
         # 公式：D_ij = 0.00143 T^1.75 / (P M_ij^(1/2) [(V_i)^(1/3) + (V_j)^(1/3)]^2)
         # 计算平均摩尔质量
-        M_ij = 2 / (1/M_i + 1/M_j)
+        M_ij = self.formula_76(M_i, M_j)
         
         # 计算扩散系数
         numerator = 0.00143 * (T ** 1.75)
@@ -963,61 +1037,9 @@ class CementProductionModel:
                     product_C *= C_i_dict[reactant] ** alpha3
         
         # 计算反应速率
-        r_instant = kr * (T ** n) * math.exp(-(EA) / (R * T)) * product_P * product_C
-
-        # [新增/修改代码] : 引入准解析积分法 (Semi-Analytical Integration)
-        # 目的：解决刚性问题。将线性外推改为指数衰减，防止 dt 内反应物消耗至负数。
-        # 逻辑：对于 dC/dt = -k*C，解析解为 C(t+dt) = C(t) * exp(-k*dt)。
-        #      实际反应消耗量 Delta_C = C(t) * (1 - exp(-k*dt))。
-        #      平均有效速率 r_effective = Delta_C / dt。
-        # ==============================================================================
-        
-        # 如果没有反应物或不需要限制，直接返回瞬时速率
-        if not reactants:
-            return r_instant
-
-        # 1. 确定限制性反应物 (通常列表第一个为主要消耗物，如CaCO3, CaO, C_sus等)
-        limiting_reactant = reactants[0]
-        
-        # 2. 获取限制性反应物的当前浓度
-        C_limit = C_i_dict.get(limiting_reactant, 0.0)
-        
-        # 3. 避免除以零或对极小数值进行计算
-        if C_limit <= 1e-20:
-            return 0.0
+        r_j = kr * (T ** n) * math.exp(-(EA) / (R * T)) * product_P * product_C
             
-        # 4. 计算表观一阶速率常数 (Apparent Rate Constant), 单位 1/s
-        # 假设 r_instant = k_app * C_limit  =>  k_app = r_instant / C_limit
-        # 这代表了当前条件下，该物质消耗的特征频率
-        k_apparent = r_instant / C_limit
-        
-        # 5. 计算无量纲时间因子 x = k * dt
-        # self.dt 在 __init__ 中定义，此处直接调用
-        dt = self.dt
-        x = k_apparent * dt
-        
-        # 6. 计算 dt 时间内的有效平均速率
-        if x > 50.0:
-            # 反应极快 (特征时间 << dt)，物质在 dt 内完全消耗殆尽
-            # 此时有效速率 = 当前全部存量 / dt
-            # 这样计算出的消耗量 = (C / dt) * dt = C，恰好归零，不为负
-            r_effective = C_limit / dt
-            
-        elif x < 1e-8:
-            # 反应极慢 (特征时间 >> dt)，线性近似足够精确，且避免 exp 精度损失
-            r_effective = r_instant
-            
-        else:
-            # 一般情况：使用指数积分因子计算
-            # 衰减因子 decay_factor = 1 - exp(-x)
-            decay_factor = 1.0 - math.exp(-x)
-            
-            # 有效速率 = (当前浓度 * 衰减比例) / dt
-            r_effective = (C_limit * decay_factor) / dt
-            
-        return r_effective
-        
-        
+        return r_j
     
     def formula_27(self):
         # 27反应源项计算公式
@@ -1157,7 +1179,6 @@ class CementProductionModel:
         # 输入：Lc（公式14输出）、Δz（段长度，参数）
         # 输出：Ags（气固换热面积）
         # 公式：Ags(k) ≈ Lc(z_k)·Δz = [2r_c sin(θ_k/2)]Δz
-        # 由于Lc已经是2r_c sin(θ_k/2)，所以直接相乘
         return Lc * delta_z
     
     def formula_41(self, sigma, Ags, epsilon_gs, Tg, Ts):
@@ -1226,7 +1247,7 @@ class CementProductionModel:
         # 计算梯度 ∂_z (H~_g + Q~_g)
         gradient = (total_current - total_prev) / delta_z
         
-        return -gradient + (Qgsrad + Qgscv) / V_delta 
+        return -gradient - (Qgsrad + Qgscv) / V_delta 
     
     def formula_46(self, cj_i, T):
         # 46权重系数
@@ -1380,9 +1401,9 @@ class CementProductionModel:
         return -k_s * dT_i_dz
     
     def formula_56(self, m_dot_i_s_0, M_i):
-        # 56入口边界初始化固体组分摩尔数
+        # 56入口边界初始化固体组分摩尔流率
         # 输入：m˙i,s,0（入口固体组分i的质量流量）、Mi（固体组分i的摩尔质量）
-        # 输出：ni,s,0（初始时刻（t=0）固体组分i的摩尔数）
+        # 输出：ni,s,0（初始时刻（t=0）固体组分i的摩尔流率）
         return m_dot_i_s_0  / M_i
     
     def formula_57(self, V_delta, C_i_s_t):
@@ -1550,15 +1571,8 @@ class CementProductionModel:
             return sum(C_i_g)
     
     def formula_78(self, A_t, A_s):
-        # 78气体横截面积 #删去
+        # 78气体横截面积
         # 输入：At（窑总横截面积，公式17输出）、As（固体横截面积，公式16输出）
-        # 输出：Ag（气体横截面积）
-        # 公式：A_g = A_t - A_s
-        return A_t - A_s
-    
-    def formula_79(self, A_s, A_t):
-        # 79气体截面积
-        # 输入：As（固体横截面积）、At（窑总横截面积）
         # 输出：Ag（气体横截面积）
         # 公式：A_g = A_t - A_s
         return A_t - A_s
@@ -1626,10 +1640,9 @@ class CementProductionModel:
                 dC_dt, dU_dt_dict = self._solve_differential_equations(cell, execution_rules, algebraic_vars)
                 
                 # ⑤ 同步更新：新值 = 原值 + 变化率 × Δt
-                # 同一个时间步 Δt 内，同一个单元里，代数计算和微分计算同时做，无先后顺序，结果互相代入
+                # 同一个时间步 Δt 内，同一个单元里，代数计算和微分计算同时代入
                 self._update_variables(cell, dC_dt, dU_dt_dict)
 
-            
             # 单元边界衔接：确保三段工艺无缝衔接
             #将前一段工艺最后一个单元的变量传递给后一段工艺的第一个单元
             #self._handle_section_transitions()
@@ -1661,7 +1674,7 @@ class CementProductionModel:
     def _get_execution_rules(self, config):
         # 整合通用公共规则和当前设备的差异化配置，生成单元的完整执行规则清单
         # 通用公式统一计算，差异化公式根据设备分别计算
-        # 差异化部分直接使用传入的config（来自section_configs），不再使用硬编码的device_specific_rules
+        # 差异化部分直接使用传入的config（来自section_configs）
         # 确保使用差异化配置中的能量方程、反应速率类型、对流换热、固相速度、内能密度约束求解
         
         #定义通用公共规则字典，键为规则名称，值为对应的公式标识
@@ -1693,55 +1706,44 @@ class CementProductionModel:
         device_type = cell['device_type']
       
 #一、基础几何与填充参数计算  
-        # 1. 计算填充率和填充角（只计算一次，供后续所有计算使用）
+        # 1. 计算填充率和填充角
         # 使用实际设备半径
         r_c = self.parameters['equipment'][device_type]['radius']
         
-        # 计算窑总横截面积（公式17）
         # 计算总横截面积：输入(设备半径)，输出(总横截面积)
         A_t = self.formula_17(r_c)
         
-        # 初始填充率设置为0.13
-        eta = 0.13
+        # 2. 基于当前状态变量(浓度)计算固体实际占据的体积 Vs
+        # 获取固体组分列表
+        stoichiometric_matrix = self.constants['stoichiometric_matrix']
+        solid_components = stoichiometric_matrix['components'][:9]
         
-        # 使用迭代方法计算填充角
-        # 1. 初始计算固体横截面积（使用初始填充率）
-        # 计算填充角：输入(固体横截面积, 总横截面积, 填充率)，输出(填充角)
-        theta = self._calculate_fill_angle(0, A_t, eta)
+        # 准备计算体积所需的摩尔质量和密度字典
+        solid_M = {c: self.constants['solid_properties'][c]['molar_mass'] for c in solid_components}
+        solid_rho = {c: self.constants['solid_properties'][c]['density'] for c in solid_components}
         
-        # 2. 使用计算得到的填充角计算固体横截面积（公式16）
-        # 计算固体横截面积：输入(设备半径, 填充角)，输出(固体横截面积)
-        A_s = self.formula_16(r_c, theta)
+        # 获取当前固体摩尔数 
+        # n = C * V_delta，所以 V_s = V_delta * sum(C * M / rho) 
+        current_C = cell['state_variables']['C']
+        V_delta = self.formula_58(A_t, cell['delta_z']) # 单段总体积
         
-        # 3. 迭代更新填充率和填充角，直到收敛
-        max_iter = 10
-        tolerance = 1e-6
-        for _ in range(max_iter):
-            # 更新填充率（公式：η = A_s / A_t）
-            new_eta = A_s / A_t
+        solid_moles = {}
+        for comp in solid_components:
+            conc = current_C.get(comp, 0.0)
+            n_i = conc * V_delta  # 摩尔数 = 浓度 * 总体积
+            solid_moles[comp] = n_i
             
-            # 检查收敛
-            if abs(new_eta - eta) < tolerance:
-                break
-            
-            # 更新填充率
-            eta = new_eta
-            
-            # 重新计算填充角
-            theta = self._calculate_fill_angle(A_s, A_t, eta)
-            
-            # 重新计算固体横截面积
-            A_s = self.formula_16(r_c, theta)
+        # 调用 formula_8 计算固体总体积 Vs
+        V_s = self.formula_8(solid_M, solid_rho, solid_moles)
         
-        # 4. 使用填充率计算公式验证（公式18）
-        # 计算填充率：输入(填充角)，输出(填充率)
-        formula_eta = self.formula_18(theta)
-        # 确保填充率一致性
-        if abs(formula_eta - eta) > tolerance:
-            # 如果不一致，以公式计算结果为准，重新计算填充角
-            theta = self._calculate_fill_angle(0, A_t, formula_eta)
-            A_s = self.formula_16(r_c, theta)
-            eta = formula_eta
+        # 3. 计算固体截面积 As (As = Vs / dz)
+        A_s = V_s / cell['delta_z']
+        
+        # 4. 计算填充率 Eta (Eta = As / At)
+        eta = A_s / A_t
+            
+        # 5. 反算填充角 Theta (调用新写的反向求解器)
+        theta = self._calculate_fill_angle(eta)
         
         # 将填充角和填充率存储在代数变量中，供后续计算使用
         algebraic_vars['theta'] = theta
@@ -1754,7 +1756,8 @@ class CementProductionModel:
         # 获取当前时刻的状态变量
         state_vars = cell['state_variables'] #获取单元的状态变量字典
         C = state_vars['C']  # 组分浓度向量
-        U_hat = state_vars['U_hat']  # 单位体积内能向量
+        U_g_current = state_vars['U_g']
+        U_s_current = state_vars['U_s']
         
         # 初始温度和压力（如果是第一次迭代，使用默认值）
         # 判断单元的代数变量中是否已存在气固温度;若存在，直接读取上一次的温度值
@@ -1772,8 +1775,6 @@ class CementProductionModel:
             else:  # kiln
                 Tg = 1400.0  # 回转窑初始气体温度
                 Ts = 1200.0   # 回转窑初始固体温度
-        
-        # 移除温度范围限制，让模型自由计算
         
         if 'P' in cell['algebraic_variables']:
             P = cell['algebraic_variables']['P']
@@ -1863,29 +1864,31 @@ class CementProductionModel:
         # 计算水力直径：输入(单段总体积, 气体横截面积)，输出(水力直径)
         DH = self.formula_9(V_delta, A_g)
         
-        # 计算气体密度（公式11）
-        gas_C = {component: C[component] for component in gas_components}
         # 计算气体密度：输入(气体性质字典, 气体浓度字典)，输出(气体密度)
+        gas_C = {component: C[component] for component in gas_components}
         rho_g = self.formula_11(self.constants['gas_properties'], gas_C)
         
         # 获取气体粘度
         mu_g = self.parameters['mu_g']
-        
-        # 计算气体轴向速度（公式10）
-        # 避免除以零错误，如果rho_g为零或非常小，使用默认值
-        if rho_g <= 1e-2 or mu_g <= 1e-20:
-            vg = 0.5  # 使用默认气体速度
+
+        # 获取气体流速规则
+        gas_velocity_rule = rules.get('gas_velocity', 'formula_10')
+        if gas_velocity_rule == 'given_parameter':
+            # 预热器：直接使用气体进料的初始流速
+            vg = self.control_variables['gas_feed']['initial_velocity']
         else:
-            # 计算气体速度：输入(水力直径, 气体粘度, 气体密度, 压力梯度)，输出(气体速度)
+            # 分解炉/回转窑：使用公式10基于压力梯度计算
             vg = self.formula_10(DH, mu_g, rho_g, dP_dz)
         
         # 获取固相速度，使用差异化配置中的公式
         solid_velocity_rule = rules.get('solid_velocity', 'formula_71')
-        if isinstance(solid_velocity_rule, str) and solid_velocity_rule == 'formula_71':
-            # 分解炉固相流速：vs = vg（公式71）
-            # 计算固体速度：输入(气体速度)，输出(固体速度)
+        if isinstance(solid_velocity_rule, (int, float)):
+            # 预热器：配置为常数值 (0.4)
+            vs = float(solid_velocity_rule)
+        elif solid_velocity_rule == 'formula_71':
+            # 分解炉：vs = vg
             vs = self.formula_71(vg)
-        elif isinstance(solid_velocity_rule, str) and solid_velocity_rule == 'formula_13':
+        elif solid_velocity_rule == 'formula_13':
             # 回转窑固相流速（公式13）
             # 完整使用公式13计算
             omega = self.control_variables.get('omega', 0.4189)  # 窑转速
@@ -1901,12 +1904,9 @@ class CementProductionModel:
             r_c = algebraic_vars['r_c']
             theta = algebraic_vars['theta']
             
-            # 计算弦长（公式14），使用预计算的填充角
             # 计算料床长度：输入(设备半径, 填充角)，输出(料床长度)
             Lc = self.formula_14(r_c, theta)
             
-            # 计算床层高度轴向梯度和床层坡度角
-            # 1. 计算当前单元的床层高度（公式72）
             # 计算床层高度：输入(设备半径, 填充角)，输出(床层高度)
             h_current = self.formula_72(r_c, theta)
             
@@ -1921,8 +1921,7 @@ class CementProductionModel:
             # 3. 构建床层高度列表，包含当前段和前一段的床层高度
             h_z = [h_prev, h_current]
             
-            # 4. 使用公式74计算床层高度轴向梯度
-            # 计算床层高度轴向梯度：输入(床层高度列表)，输出(床层高度轴向梯度)
+            # 4.计算床层高度轴向梯度：输入(床层高度列表)，输出(床层高度轴向梯度)
             dh_z_dz = self.formula_74(h_z)
             
             # 5. 使用公式73计算床层坡度角
@@ -1937,21 +1936,18 @@ class CementProductionModel:
             vs = algebraic_vars.get('vs', 0.4)
         
         # 计算固体组分通量（公式25）
-        N_i_s = [] #初始化固体组分通量列表
+        N_i_s_list = [] #初始化固体组分通量列表
         for component in solid_components: #遍历所有固体组分
             C_i_s = C[component] #读取该组分的浓度
             # 计算固体通量：输入(固体速度, 组分浓度)，输出(固体组分通量)
             N_i = self.formula_25(vs, C_i_s)
-            N_i_s.append(N_i) #将通量添加到N_i_s列表
-        
-        # 计算气体组分通量（公式21）
-        N_i_g = []
-        # 准备气体通量计算所需的额外参数
-        components = gas_components #气体组分列表
-        
+            N_i_s_list.append(N_i) #将通量添加到N_i_s列表
+        algebraic_vars['N_s'] = N_i_s_list # 存储以供微分求解复用
+
         # 计算气体总摩尔浓度（公式77）
         # 计算气体总摩尔浓度：输入(浓度字典)，输出(气体总摩尔浓度)
-        cg = self.formula_77(C)
+        gas_C_dict = {k: C.get(k, 0.0) for k in gas_components}
+        cg = self.formula_77(gas_C_dict)
         
         # 计算各组分摩尔分数（公式61）
         xj = [] #初始化摩尔分数列表
@@ -1960,11 +1956,13 @@ class CementProductionModel:
             # 计算摩尔分数：输入(组分浓度, 总摩尔浓度)，输出(摩尔分数)
             x_i = self.formula_61(C_i_g_t, cg)
             xj.append(x_i) #将摩尔分数添加到xj列表
-        
+
+        # 计算气体组分通量（公式21）
+        N_i_g_list = []
+        dC_i_g_dz = 0.0
+        C_i_g = C[component]
         for i, component in enumerate(gas_components): #遍历所有气体组分，获取索引
-            C_i_g = C[component]
-            
-            # 计算组分i浓度梯度（公式23）
+            # 1. 计算浓度梯度 (扩散项必要参数)
             # 获取前一个单元的浓度
             if index > 0: #若不是第一个单元
                 prev_cell = self.cells[index-1] #获取前一个单元
@@ -1975,21 +1973,30 @@ class CementProductionModel:
                 dC_i_g_dz = self.formula_23(C_i_g, prev_C_i_g, delta_z)
             else:
                 dC_i_g_dz = 0.0 #初始化浓度梯度为 0
+ 
+            # 2. 计算通量 (C_sus纯对流，其他气体含扩散)
+            if component == 'C_sus':
+                # C_sus 视为悬浮颗粒，使用纯对流公式 (formula_25)
+                N_i = self.formula_25(vg, C[component])
+            else:
+                # 常规气体使用对流+扩散公式 (formula_21)
+                # formula_21 内部会调用 formula_22 计算有效扩散系数
+                N_i = self.formula_21(vg, C[component], Tg, P, gas_components, xj, cg, dC_i_g_dz, i)
+            N_i_g_list.append(N_i) 
+        algebraic_vars['N_g'] = N_i_g_list # 存储以供微分求解复用
             
-            # 计算气体通量：输入(气体速度, 组分浓度, 气体温度, 压力, 组分列表, 摩尔分数列表, 总摩尔浓度, 浓度梯度, 组分索引)，输出(气体组分通量)
-            N_i = self.formula_21(vg, C_i_g, Tg, P, components, xj, cg, dC_i_g_dz, i)
-            N_i_g.append(N_i)
+
    
 #五、焓通量密度计算     
         # 3. 计算焓通量密度
         # 固体焓通量密度（公式68）
         # 计算固体焓通量密度：输入(固体组分摩尔焓列表, 固体组分通量列表)，输出(固体焓通量密度)
-        H_tilde_s = self.formula_68(h_i_s, N_i_s)
+        H_tilde_s = self.formula_68(h_i_s, N_i_s_list)
         algebraic_vars['H_tilde_s'] = H_tilde_s #存储固体焓通量密度
         
         # 气体焓通量密度（公式69）
         # 计算气体焓通量密度：输入(气体组分摩尔焓列表, 气体组分通量列表)，输出(气体焓通量密度)
-        H_tilde_g = self.formula_69(h_i_g, N_i_g)
+        H_tilde_g = self.formula_69(h_i_g, N_i_g_list)
         algebraic_vars['H_tilde_g'] = H_tilde_g
   
 #六、气体比热容与对流换热计算      
@@ -2245,31 +2252,46 @@ class CementProductionModel:
         if abs(volume_fraction_sum - 1.0) > 1e-10:
             # 以固体体积分数为基准，调整气体体积分数
             V_g_fraction = 1.0 - V_s_fraction
-            # 或者以气体体积分数为基准，调整固体体积分数
-            # V_s_fraction = 1.0 - V_g_fraction
         
         if isinstance(internal_energy_constraint, str): #若内能约束为单公式
             if internal_energy_constraint == 'formula_65':
                 # 分解炉内能密度约束（公式65）
                 # 计算内能密度：输入(压力, 气体单位体积焓, 固体单位体积焓, 气体体积分数)，输出(内能密度)
-                U_hat = self.formula_65(P, H_hat_g, H_hat_s, V_g_fraction)
-                algebraic_vars['U_hat'] = U_hat #存储分解炉内能密度
+                U_hat_calc = self.formula_65(P, H_hat_g, H_hat_s, V_g_fraction)
+
+                # 这是一个近似分配，用于保持一致性
+                total_enthalpy = H_hat_g + H_hat_s
+                if total_enthalpy != 0:
+                    ratio_g = H_hat_g / total_enthalpy
+                else:
+                    ratio_g = 0.5
+                
+                algebraic_vars['U_g'] = U_hat_calc * ratio_g
+                algebraic_vars['U_s'] = U_hat_calc * (1 - ratio_g)
+                algebraic_vars['U_hat'] = U_hat_calc # 记录总值
         elif isinstance(internal_energy_constraint, list): #若内能约束为多公式
             # 回转窑内能密度约束（气体和固体）
             if len(internal_energy_constraint) >= 2: #若约束列表包含至少两个公式
                 # 气体内能密度约束（公式2）
                 # 计算气体内能密度：输入(压力, 气体单位体积焓, 气体体积分数)，输出(气体内能密度)
-                U_g = self.formula_2(P, H_hat_g, V_g_fraction)
-                algebraic_vars['U_g'] = U_g #存储气体内能密度
+                U_g_calc = self.formula_2(P, H_hat_g, V_g_fraction)
+                algebraic_vars['U_g'] = U_g_calc #存储气体内能密度
                 
                 # 固体内能密度约束（公式3）
                 # 计算固体内能密度：输入(固体单位体积焓)，输出(固体内能密度)
-                U_s = self.formula_3(H_hat_s)
-                algebraic_vars['U_s'] = U_s
+                U_s_calc = self.formula_3(H_hat_s)
+                algebraic_vars['U_s'] = U_s_calc
                 
                 # 总内能密度
-                U_hat = U_g + U_s
-                algebraic_vars['U_hat'] = U_hat #存储回转窑总内能密度
+                algebraic_vars['U_hat'] = U_g_calc + U_s_calc #存储回转窑总内能密度
+
+        # 如果没有约束方程，则使用当前状态变量的值
+        if 'U_g' not in algebraic_vars:
+            algebraic_vars['U_g'] = U_g_current
+        if 'U_s' not in algebraic_vars:
+            algebraic_vars['U_s'] = U_s_current
+        if 'U_hat' not in algebraic_vars:
+            algebraic_vars['U_hat'] = algebraic_vars['U_g'] + algebraic_vars['U_s']
         
         # 10. 设置其他必要的代数变量
         algebraic_vars['Tg'] = Tg #存储气体温度 Tg
@@ -2298,7 +2320,8 @@ class CementProductionModel:
         # 获取当前单元的状态变量
         state_vars = cell['state_variables'] #获取单元的状态变量字典
         C = state_vars['C']  # 组分浓度向量
-        U_hat = state_vars['U_hat']  # 单位体积内能向量
+        U_g = state_vars['U_g'] 
+        U_s = state_vars['U_s']
         
         # 获取单元所属设备类型
         section = cell['device_type']
@@ -2307,8 +2330,8 @@ class CementProductionModel:
         Tg = algebraic_vars.get('Tg', 1000.0)  # 气体温度，从代数计算得到
         Ts = algebraic_vars.get('Ts', 1000.0)  # 固体温度，从代数计算得到
         P = algebraic_vars.get('P', self.constants['P0'])  # 压力，从代数计算得到
-        vg = algebraic_vars.get('vg', 0.084)  # 气体速度，从代数计算得到
-        vs = algebraic_vars.get('vs', 0.0)  # 固体速度，从代数计算得到
+        vg = algebraic_vars.get('vg', 0.5)  # 气体速度，从代数计算得到
+        vs = algebraic_vars.get('vs', 0.5)  # 固体速度，从代数计算得到
         
         # 获取所有组分列表
         stoichiometric_matrix = self.constants['stoichiometric_matrix'] #从化学计量矩阵中获取组分信息
@@ -2361,33 +2384,36 @@ class CementProductionModel:
         # 2. 计算通量和通量梯度
         
         # 固体组分处理
+        N_i_s_current_list = algebraic_vars['N_s']
+
         for i, component in enumerate(solid_components): #遍历所有固体组分，逐个计算浓度变化率
-            # 计算固体通量：输入(固体速度, 组分浓度)，输出(固体组分通量)
-            N_i_s = self.formula_25(vs, C[component])
+            # 获取代数计算中已算好的当前单元固体通量列表
+            # 1. 直接复用当前通量
+            N_i_s = N_i_s_current_list[i]
             
-            # 计算通量梯度（公式29）
-            if index > 0: #若不是第一个单元，取前一个单元的通量
+            # 2. 获取前一单元通量 (prev_N)
+            if index > 0: #若不是第一个单元
+                # 直接复用前一单元代数变量中存储的通量
                 prev_cell = self.cells[index-1] #获取前一个单元
-                prev_C = prev_cell['state_variables']['C']  #读取前一个单元的浓度字典
-                prev_vs = prev_cell['algebraic_variables'].get('vs', vs)  #读取前一个单元的固体速度
-                # 计算前一个单元的固体通量：输入(固体速度, 组分浓度)，输出(固体组分通量)
-                prev_N_i_s = self.formula_25(prev_vs, prev_C[component])
+                prev_N_i_s = prev_cell['algebraic_variables']['N_s'][i]
             else:
-                # 【新增】若是第一个单元(index=0)，计算入口边界通量
-                # 基于 solid_feed 控制变量计算入口通量 Flux_in = (MassRate * Fraction / MolarMass) / Area
-                feed_total_rate = self.control_variables['solid_feed']['total_rate'] # g/s
-                feed_composition = self.control_variables['solid_feed']['composition']
-                feed_mass_fraction = feed_composition.get(component, 0.0)
+                # 入口边界：需独立计算 (Flux = Flow / Area)
+                # A. 生料贡献
+                feed_total = self.control_variables['solid_feed']['total_rate'] # g/s
+                feed_comp = self.control_variables['solid_feed']['composition']
+                mass_frac_feed = feed_comp.get(component, 0.0)
+                # B. 燃料贡献
+                fuel_total = self.control_variables['fuel']['rate'] # g/s
+                fuel_comp = self.control_variables['fuel']['composition']
+                mass_frac_fuel = fuel_comp.get(component, 0.0)
+                # C. 合并质量流率
+                total_mass_rate_in = (feed_total * mass_frac_feed) + (fuel_total * mass_frac_fuel)
+                # D. 计算摩尔通量
+                molar_mass = self.constants['solid_properties'][component]['molar_mass']
                 
-                # 获取摩尔质量
-                if component in self.constants['solid_properties']:
-                    molar_mass = self.constants['solid_properties'][component]['molar_mass'] # g/mol
-                else:
-                    molar_mass = 100.0 # 默认防止除零
-                
-                # 计算入口摩尔流率 mol/s
-                inlet_molar_rate = (feed_total_rate * feed_mass_fraction) / molar_mass
-                
+                # 计算总摩尔流率 (mol/s)
+                # 使用公式56: n_dot = m_dot / M
+                inlet_molar_rate = self.formula_56(total_mass_rate_in, molar_mass)
                 # 计算入口通量 mol/(m²·s)
                 prev_N_i_s = inlet_molar_rate / A_t
             
@@ -2397,50 +2423,50 @@ class CementProductionModel:
             # 计算固体浓度变化率：输入(通量梯度, 反应源项)，输出(浓度变化率)
             dC_dt[component] = self.formula_28(dN_i_s_dz, Rs[i])
         
-        # 气体组分处理
-        # 气体组分列表
-        components = gas_components
-        
-        # 计算气体总摩尔浓度：输入(浓度字典)，输出(气体总摩尔浓度)
-        cg = self.formula_77(C)
-        
-        # 计算各组分摩尔分数（公式61）
-        xj = []
-        for component in gas_components: #遍历所有气体组分
-            C_i_g_t = C[component] #读取该组分的浓度
-            x_i = self.formula_61(C_i_g_t, cg)
-            xj.append(x_i)
-        
-        # 初始浓度梯度为0
-        dC_i_g_dz = 0.0
+        # --- 气体组分处理 ---
+        # 获取代数计算中已算好的当前单元气体通量列表 (已包含扩散计算)
+        N_i_g_current_list = algebraic_vars['N_g']
         
         for i, component in enumerate(gas_components): #遍历所有气体组分，逐个计算浓度变化率
-            # 计算气体通量：输入(气体速度, 组分浓度, 气体温度, 压力, 组分列表, 摩尔分数列表, 总摩尔浓度, 浓度梯度, 组分索引)，输出(气体组分通量)
-            N_i_g = self.formula_21(vg, C[component], Tg, P, components, xj, cg, dC_i_g_dz, i)
-            
-            # 计算通量梯度（公式31）
-            # 【修改部分】区分内部单元和入口单元
+            # 1. 直接复用当前通量
+            N_i_g = N_i_g_current_list[i]
+
+            # 2. 获取前一单元通量 (prev_N)
             if index > 0:
                 prev_cell = self.cells[index-1] #获取前一个单元
-                prev_C = prev_cell['state_variables']['C'] #读取前一个单元的浓度字典
-                prev_vg = prev_cell['algebraic_variables'].get('vg', vg) #读取前一个单元的气体速度
-                # 计算前一个单元的气体通量
-                prev_N_i_g = self.formula_21(prev_vg, prev_C[component], Tg, P, components, xj, cg, dC_i_g_dz, i)
+                prev_N_i_g = prev_cell['algebraic_variables']['N_g'][i]
             else:
-                # 【新增】若是第一个单元(index=0)，计算入口边界通量
-                # 基于 gas_feed 控制变量计算入口通量 Flux_in = (MolarRate * MoleFraction) / Area
-                feed_total_rate = self.control_variables['gas_feed']['total_rate'] # mol/s (注意单位是mol)
-                feed_composition = self.control_variables['gas_feed']['composition']
-                feed_mole_fraction = feed_composition.get(component, 0.0)
+                # 若是第一个单元(index=0)，计算入口边界通量
+                # 1. 气体进料贡献
+                gas_feed_total_rate = self.control_variables['gas_feed']['total_rate'] # mol/s
+                gas_feed_comp = self.control_variables['gas_feed']['composition']
+                # 获取摩尔分数
+                mole_frac_gas = gas_feed_comp.get(component, 0.0)
+                # 计算摩尔流率
+                rate_from_gas = gas_feed_total_rate * mole_frac_gas # mol/s
+
+                # 2. 燃料进料贡献
+                fuel_rate_mass = self.control_variables['fuel']['rate'] # g/s
+                fuel_comp = self.control_variables['fuel']['composition'] # 质量分数
+                mass_frac_fuel = fuel_comp.get(component, 0.0)
                 
+                rate_from_fuel = 0.0
+                if mass_frac_fuel > 0:
+                    # 获取摩尔质量 (C_sus 在 gas_properties 中)
+                    if component in self.constants['gas_properties']:
+                        molar_mass = self.constants['gas_properties'][component]['molar_mass']
+                    else:
+                         molar_mass = self.constants['solid_properties'].get(component, {}).get('molar_mass', 100.0)
+                    
+                    # 计算该组分的质量流率 g/s
+                    mass_rate_i = fuel_rate_mass * mass_frac_fuel
+                    # formula_56: n_dot = m_dot / M  将 g/s 转换为 mol/s
+                    rate_from_fuel = self.formula_56(mass_rate_i, molar_mass)
                 # 计算入口摩尔流率 mol/s
-                inlet_molar_rate = feed_total_rate * feed_mole_fraction
+                total_inlet_molar_rate = rate_from_gas + rate_from_fuel
                 
-                # 计算入口通量 mol/(m²·s)
-                # 注意：气体通常在回转窑尾部进入，但在本代码的简化模型中，
-                # _feed_preheater_inlet 函数将气体和固体都设置在 index=0 处，
-                # 故此处保持一致，假设为并流或简化边界。
-                prev_N_i_g = inlet_molar_rate / A_t
+                # 计算入口通量 mol/(m²·s)\A_t 为入口截面积
+                prev_N_i_g = total_inlet_molar_rate / A_t
             
             # 计算气体通量梯度：输入(当前单元通量, 前一单元通量, 轴向步长)，输出(通量梯度)
             dN_i_g_dz = self.formula_31(N_i_g, prev_N_i_g, delta_z)
@@ -2450,7 +2476,6 @@ class CementProductionModel:
 
 #三、内能变化率计算            
         # 3. 计算内能变化率 dŨ/dt
-        
         # --- 3.1 准备基础常量与组件列表 ---
         sigma = self.constants.get('sigma', 5.67e-8)
         epsilon_s = self.parameters.get('epsilon_s', 0.9)
@@ -2468,10 +2493,9 @@ class CementProductionModel:
         theta = algebraic_vars.get('theta', math.pi)
         
         # --- 3.3 计算辐射与对流中间变量 ---
-        # 必须重新计算这些局部变量，确保能量方程输入准确
-        
         # 计算气体总摩尔浓度 cg
-        cg = self.formula_77(C)
+        gas_C_dict = {k: C.get(k, 0.0) for k in gas_components}
+        cg = self.formula_77(gas_C_dict)
         
         # 计算摩尔分数 (防止 cg=0 除零错误)
         xH2O = C.get('H2O', 0.0) / cg if cg > 1e-12 else 0.0
@@ -2541,10 +2565,35 @@ class CementProductionModel:
         dU_dt_solid = 0.0
         dU_dt_gas = 0.0
         
-        energy_eq = rules.get('energy_eq', 'formula_42')
+        energy_eq = rules.get('energy_eq')
+        if energy_eq is None:
+            # === 预热器：纯输运模式 (无能量方程配置) ===
+            # 公式: dU/dt = -dH/dz
+            # 获取前一单元焓通量
+            H_s_prev = algebraic_vars.get('H_tilde_s', 0.0)
+            H_g_prev = algebraic_vars.get('H_tilde_g', 0.0)
+            
+            if index > 0:
+                prev_alg = self.cells[index-1]['algebraic_variables']
+                H_s_prev = prev_alg.get('H_tilde_s', H_s_prev)
+                H_g_prev = prev_alg.get('H_tilde_g', H_g_prev)
+            
+            # 当前单元焓通量
+            H_s_curr = algebraic_vars.get('H_tilde_s', 0.0)
+            H_g_curr = algebraic_vars.get('H_tilde_g', 0.0)
+            
+            # 计算焓梯度 (等截面，直接差分)
+            # dH/dz = (H_curr - H_prev) / dz
+            # 守恒方程: dU/dt = -dH/dz = (H_prev - H_curr) / dz
+            dH_s_dz = (H_s_curr - H_s_prev) / delta_z
+            dH_g_dz = (H_g_curr - H_g_prev) / delta_z
+            
+            dU_dt_solid = -dH_s_dz
+            dU_dt_gas = -dH_g_dz
+            dU_dt_total = dU_dt_solid + dU_dt_gas
         
         # 判断：回转窑使用双方程 (List类型且包含公式44,45)
-        if isinstance(energy_eq, list) and len(energy_eq) >= 2:
+        elif isinstance(energy_eq, list) and len(energy_eq) >= 2:
             # === 回转窑：双方程独立求解 ===
             # 公式44: 固体能量平衡
             dU_dt_solid = self.formula_44(
@@ -2633,173 +2682,77 @@ class CementProductionModel:
             # 同步更新全局数组
             self.variables['state_variables']['C'][index][component] = state_vars['C'][component]
         
-        # 更新内能变量 Ũ
-        # 获取上一时刻的分项内能 (从代数变量中读取)
-        current_U_g = algebraic_vars.get('U_g', 0.0)
-        current_U_s = algebraic_vars.get('U_s', 0.0)
+        # 2. 【修正】更新独立的状态变量 U_g 和 U_s
+        # 直接对状态变量积分，不再依赖代数变量
+        state_vars['U_g'] += dU_dt_dict['gas'] * self.dt
+        state_vars['U_s'] += dU_dt_dict['solid'] * self.dt
         
-        # 分别积分更新
-        new_U_g = current_U_g + dU_dt_dict['gas'] * self.dt
-        new_U_s = current_U_s + dU_dt_dict['solid'] * self.dt
+        # 同步回全局状态数组
+        self.variables['state_variables']['U_g'][index] = state_vars['U_g']
+        self.variables['state_variables']['U_s'][index] = state_vars['U_s']
         
-        # 更新代数变量记录 (这确保了下一步迭代有正确的起点)
-        algebraic_vars['U_g'] = new_U_g
-        algebraic_vars['U_s'] = new_U_s
-        self.variables['algebraic_variables']['U_g'][index] = new_U_g
-        self.variables['algebraic_variables']['U_s'][index] = new_U_s
+        # 更新代数变量 U_hat (仅用于记录)
+        algebraic_vars['U_hat'] = state_vars['U_g'] + state_vars['U_s']
+        self.variables['algebraic_variables']['U_hat'][index] = algebraic_vars['U_hat']
         
-        # 重组总内能并更新状态变量
-        state_vars['U_hat'] = new_U_g + new_U_s
-        self.variables['state_variables']['U_hat'][index] = state_vars['U_hat']
         
-        # 2. 准备温度求解的目标值
-        # 直接使用刚更新的分项内能
-        target_U_g = new_U_g
-        target_U_s = new_U_s
-        
-# 二、温度求解和更新 (修改部分：全段气固分离求解，预热器固定，分解炉按比例分配)
-        # ==============================================================================
-        
-        # 准备数据
-        current_C = state_vars['C']
-        T0 = self.constants['T0']
-        all_components = self.constants['stoichiometric_matrix']['components']
+# 二、温度求解和更新 
+        # 准备组分列表
+        stoichiometric_matrix = self.constants['stoichiometric_matrix']
+        all_components = stoichiometric_matrix['components']
         solid_components = all_components[:9]
         gas_components = all_components[9:]
-        device_type = cell['device_type']
         
-        # 定义辅助函数：计算指定组分在给定温度下的总焓密度 H_hat 和总热容密度 Cp_hat
-        def calculate_H_and_Cp(component_list, T_guess):
-            H_sum = 0.0
-            Cp_sum = 0.0
-            for comp in component_list:
-                conc = current_C.get(comp, 0.0)
-                if conc > 1e-15:
-                    # 获取热容系数
-                    if comp in self.constants['molar_heat_capacity']:
-                        coeffs = self.constants['molar_heat_capacity'][comp]
-                        C0, C1, C2 = coeffs['C0'], coeffs['C1'], coeffs['C2']
-                    else:
-                        C0, C1, C2 = 0.0, 0.0, 0.0
-                    
-                    # 计算积分焓 (formula_5)
-                    integral_h = self.formula_5(C0, C1, C2, T0, T_guess)
-                    # 获取标准生成焓
-                    Hf = self.constants['standard_enthalpy'].get(comp, 0.0)
-                    # 累加焓密度 H_hat = C * (Hf + integral_h)
-                    H_sum += conc * (Hf + integral_h)
-                    
-                    # 计算摩尔热容 (formula_6) 并累加到总热容密度 (导数项)
-                    Cp_molar = self.formula_6(C0, C1, C2, T_guess)
-                    Cp_sum += conc * Cp_molar
-            return H_sum, Cp_sum
-
-        # 迭代参数
-        max_iter = 20
-        tolerance = 1e-3
+        # 1. 计算固体总质量 (用于计算温度变化分母)
+        solid_mass = 0.0
+        for component in solid_components:
+            concentration = state_vars['C'][component]
+            if concentration > 0:
+                molar_mass = self.constants['solid_properties'][component]['molar_mass']
+                # 浓度(mol/m³) * 摩尔质量(g/mol) = 质量密度(g/m³)
+                solid_mass += concentration * molar_mass
         
-        # 获取当前压力和填充率用于内能转换 U = H - PV
-        P_current = algebraic_vars.get('P', self.constants['P0'])
-        eta = algebraic_vars.get('eta', 0.5) 
-        V_g_fraction = 1.0 - eta 
-        PV_term = P_current * V_g_fraction 
-
-        # --- 分支 1: 预热器 (不涉及反应，不考虑变化，温度固定) ---
-        if device_type == 'preheater':
-            feed_gas_T = self.control_variables['gas_feed']['temperature']   # 1300K
-            feed_solid_T = self.control_variables['solid_feed']['temperature'] # 600K
-            
-            algebraic_vars['Tg'] = feed_gas_T
-            algebraic_vars['Ts'] = feed_solid_T
-            
-            # 为了数据连续性，也可更新分项内能记录(可选)
-            # algebraic_vars['U_g'] = ... 
-            # algebraic_vars['U_s'] = ...
-
-        # --- 分支 2 & 3: 分解炉和回转窑 (均需分开求解气固温度) ---
-        else:
-            # 获取上一时刻的分项内能 (从代数变量读取，此时尚未更新)
-            # 如果是首轮迭代，algebraic_vars 中可能没有 U_g/U_s，使用比例估算作为起点
-            U_g_old = algebraic_vars.get('U_g', state_vars['U_hat'] * 0.2)
-            U_s_old = algebraic_vars.get('U_s', state_vars['U_hat'] * 0.8)
-            
-            # 累积计算目标内能
-            target_U_g = U_g_old + dU_dt_dict['gas'] * self.dt
-            target_U_s = U_s_old + dU_dt_dict['solid'] * self.dt
-
-            # ---------------------------------------------------
-            # 求解气体温度 Tg (Newton-Raphson)
-            # 方程: (H_g - PV) = U_g
-            # ---------------------------------------------------
-            Tg = algebraic_vars['Tg']
-            for k in range(max_iter):
-                H_g, Cp_g_sum = calculate_H_and_Cp(gas_components, Tg)
-                
-                # 构造残差方程 f(T)
-                f = (H_g - PV_term) - target_U_g
-                
-                # 导数
-                df = Cp_g_sum 
-                if df < 1e-6: df = 1e-6
-                
-                delta_T = f / df
-                
-                # 仅保留数学上的阻尼，防止单步步长过大导致震荡
-                step_limit = max(200.0, abs(Tg)*0.5)
-                delta_T = max(min(delta_T, step_limit), -step_limit)
-                
-                T_next = Tg - delta_T
-
-                if Tg <= 10.0 + 1e-3:
-                    print(f"警告：单元 {index} 气体温度收敛于下限 10.0 K，可能存在严重的能量平衡错误或热量耗尽！")
-                
-                delta_T = Tg - T_next # 更新实际步长用于判断收敛
-                
-                Tg = T_next
-                
-                if abs(delta_T) < tolerance:
-                    break
-
-            algebraic_vars['Tg'] = Tg
-            algebraic_vars['U_g'] = target_U_g # 更新记录
-
-            # ---------------------------------------------------
-            # 求解固体温度 Ts (Newton-Raphson)
-            # 方程: H_s = U_s (忽略PV做功)
-            # ---------------------------------------------------
-            Ts = algebraic_vars['Ts']
-            for k in range(max_iter):
-                H_s, Cp_s_sum = calculate_H_and_Cp(solid_components, Ts)
-                
-                # 构造残差方程 f(T)
-                f = H_s - target_U_s
-                
-                # 导数
-                df = Cp_s_sum
-                if df < 1e-6: df = 1e-6
-                
-                delta_T = f / df
-
-                # 仅保留数学上的阻尼，防止单步步长过大导致震荡
-                step_limit = max(200.0, abs(Ts)*0.5)
-                delta_T = max(min(delta_T, step_limit), -step_limit)
-                
-                T_next = Ts - delta_T
-                if Tg <= 10.0 + 1e-3:
-                    print(f"警告：单元 {index} 气体温度收敛于下限 10.0 K，可能存在严重的能量平衡错误或热量耗尽！")
-                
-                delta_T = Ts - T_next # 更新实际步长用于判断收敛
-                
-                Ts = T_next
-                
-                if abs(delta_T) < tolerance:
-                    break
-
-            algebraic_vars['Ts'] = Ts
-            algebraic_vars['U_s'] = target_U_s # 更新记录
+        # 固体平均比热容 
+        solid_cp = 0.8  # J/(g·K)
         
+        # 2. 计算气体总质量
+        gas_mass = 0.0
+        for component in gas_components:
+            concentration = state_vars['C'][component]
+            if concentration > 0:
+                molar_mass = self.constants['gas_properties'][component]['molar_mass']
+                gas_mass += concentration * molar_mass
+        
+        # 气体比热容 (使用代数计算中已算出的实时值)
+        gas_cp = algebraic_vars.get('cp_g', 1.0) # J/(g·K)
+        
+        # 3. 显式计算温度变化 (Delta T = Delta Energy / (Mass * Cp))
+        dt = self.dt
+        
+        # --- 更新气体温度 Tg ---
+        # 获取气体能量变化率
+        dU_dt_gas = float(dU_dt_dict['gas'])
+
+        if gas_mass > 1e-6 and gas_cp > 0:
+            gas_energy_change = dU_dt_gas * dt  # J/m³
+            # 温度变化 = 能量变化 / (质量密度 * 比热容)
+            Tg_change = gas_energy_change / (gas_mass * gas_cp)
+
+            # 更新温度
+            algebraic_vars['Tg'] += float(Tg_change)
+        
+        # --- 更新固体温度 Ts ---
+        dU_dt_solid = float(dU_dt_dict['solid'])
+
+        if solid_mass > 1e-6 and solid_cp > 0:
+            solid_energy_change = dU_dt_solid * dt
+            Ts_change = solid_energy_change / (solid_mass * solid_cp)
+            
+            # 更新温度
+            algebraic_vars['Ts'] += float(Ts_change)
+
+
 # 一、压力求解和更新 (修改部分：使用理想气体状态方程)
-        # ==============================================================================
         
         # 计算气体总摩尔浓度
         gas_total_concentration = self.formula_77(state_vars['C'])
@@ -2823,131 +2776,6 @@ class CementProductionModel:
         # 5. 同步更新全局设备类型标识
         self.variables['device_type'][index] = cell['device_type']
     
-#二、相邻单元传递方法
-    def _transfer_between_cells(self, cell1, cell2):
-        # 相邻单元连续传递：前一个单元、后一个单元
-        # 前一区段最后一个单元 = 后一区段第一个单元
-        # 复制单元1的状态变量到单元2
-        cell2['state_variables']['C'] = cell1['state_variables']['C'].copy() #复制浓度字典
-        cell2['state_variables']['U_hat'] = cell1['state_variables']['U_hat'] #复制内能字典
-        
-        # 复制单元1的代数变量到单元2
-        # 复制气固温度
-        if 'Tg' in cell1['algebraic_variables']:
-            cell2['algebraic_variables']['Tg'] = cell1['algebraic_variables']['Tg']
-        if 'Ts' in cell1['algebraic_variables']:
-            cell2['algebraic_variables']['Ts'] = cell1['algebraic_variables']['Ts']
-        if 'P' in cell1['algebraic_variables']:
-            cell2['algebraic_variables']['P'] = cell1['algebraic_variables']['P']
-
-#三、预热器进料补给方法
-    def _feed_preheater_inlet(self):
-        # 预热器入口按初始进料值「补料」
-        # 判断是否存在单元，且第一个单元为预热器（进料入口）
-        if self.cells and self.cells[0]['device_type'] == 'preheater':
-            # 获取预热器第一个单元
-            inlet_cell = self.cells[0]
-            
-            # 设置初始进料温度，区分气固温度
-            inlet_cell['algebraic_variables']['Tg'] = self.control_variables['gas_feed']['temperature']
-            inlet_cell['algebraic_variables']['Ts'] = self.control_variables['solid_feed']['temperature']
-            
-            # 设置初始进料浓度
-            # 计算单段总体积（公式58）
-            # 计算横截面积：输入(半径)，输出(横截面积)
-            A_t = self.formula_17(self.parameters['equipment']['preheater']['radius'])
-            delta_z = inlet_cell['delta_z']
-            # 计算单段总体积：输入(总横截面积, 轴向步长)，输出(单段总体积)
-            V_delta = self.formula_58(A_t, delta_z)
-            
-            # 固体进料
-            total_solid_rate = self.control_variables['solid_feed']['total_rate'] #获取固体总进料速率
-            for component, mass_fraction in self.control_variables['solid_feed']['composition'].items(): #遍历固体进料的各组分
-                # 计算该组分的质量流量（总速率 × 质量分数）
-                mass_rate = total_solid_rate * mass_fraction
-                # 获取摩尔质量
-                molar_mass = self.constants['solid_properties'][component]['molar_mass']
-                # 入口边界初始化固体组分摩尔数（公式56）
-                # 计算摩尔数：输入(质量速率, 摩尔质量)，输出(摩尔数)
-                n_i_s_0 = self.formula_56(mass_rate, molar_mass)
-                # 初始化固体组分i浓度（公式59）
-                # 计算固体浓度：输入(单段体积, 摩尔数)，输出(固体浓度)
-                C_i_s_0 = self.formula_59(V_delta, n_i_s_0)
-                # 设置浓度
-                inlet_cell['state_variables']['C'][component] = C_i_s_0
-            
-            # 气体进料
-            gas_temp = self.control_variables['gas_feed']['temperature'] #获取气体进料温度
-            gas_pressure = self.constants['P0']
-            R = self.constants['R']
-            for component, mole_fraction in self.control_variables['gas_feed']['composition'].items(): #遍历气体进料的各组分
-                # 初始化气体组分i浓度（公式60）
-                # 计算气体浓度：输入(摩尔分数, 压力, 温度, 气体常数)，输出(气体浓度)
-                C_i_g_0 = self.formula_60(mole_fraction, gas_pressure, gas_temp, R)
-                # 设置浓度
-                inlet_cell['state_variables']['C'][component] = C_i_g_0
-            
-            # 燃料进料处理
-            fuel = self.control_variables['fuel']
-            fuel_rate = fuel['rate']  # g/s
-            fuel_composition = fuel['composition']
-            
-            # 计算燃料各成分的浓度
-            for component, mass_fraction in fuel_composition.items():
-                # 计算该组分的质量流量（总速率 × 质量分数）
-                mass_rate = fuel_rate * mass_fraction  # g/s
-                
-                # 获取摩尔质量
-                if component in self.constants['solid_properties']:
-                    molar_mass = self.constants['solid_properties'][component]['molar_mass']
-                elif component in self.constants['gas_properties']:
-                    molar_mass = self.constants['gas_properties'][component]['molar_mass']
-                else:
-                    # 默认使用平均摩尔质量
-                    molar_mass = 28.0  # g/mol，近似值
-                
-                # 计算摩尔流量
-                mole_rate = mass_rate / molar_mass  # mol/s
-                
-                # 计算浓度 (mol/m³) = 摩尔流量 / 体积流量
-                # 体积流量 = 气体进料速率 / 气体密度
-                # 简化处理：假设燃料直接进入系统，使用单段总体积计算浓度
-                fuel_concentration = mole_rate / V_delta  # mol/m³
-                
-                # 添加到浓度字典中
-                if component in inlet_cell['state_variables']['C']:
-                    inlet_cell['state_variables']['C'][component] += fuel_concentration
-                else:
-                    inlet_cell['state_variables']['C'][component] = fuel_concentration
- 
-#四、区段衔接处理方法 :处理预热器→分解炉、分解炉→回转窑的区段边界传递      
-    def _handle_section_transitions(self):
-        # 处理不同区段之间的边界衔接
-        preheater_cells = [cell for cell in self.cells if cell['device_type'] == 'preheater'] #筛选所有预热器单元
-        calciner_cells = [cell for cell in self.cells if cell['device_type'] == 'calciner']
-        kiln_cells = [cell for cell in self.cells if cell['device_type'] == 'kiln']
-        
-        # 1. 预热器最后一个单元 → 分解炉第一个单元
-        if preheater_cells and calciner_cells: #判断预热器和分解炉均有单元
-            preheater_last = preheater_cells[-1] #获取预热器最后一个单元
-            calciner_first = calciner_cells[0]#获取分解炉第一个单元
-            # 调用传递方法:传递「升温后温度 + 原始浓度」
-            self._transfer_between_cells(preheater_last, calciner_first)
-        
-        # 2. 分解炉最后一个单元 → 回转窑第一个单元
-        if calciner_cells and kiln_cells: #判断分解炉和回转窑均有单元
-            calciner_last = calciner_cells[-1] #获取分解炉最后一个单元
-            kiln_first = kiln_cells[0] #获取回转窑第一个单元
-            # 传递「反应后温度 + 浓度」
-            self._transfer_between_cells(calciner_last, kiln_first)
-        
-        # 3. 回转窑最后一个单元 → 作为出料值
-        if kiln_cells: #判断回转窑有单元
-            kiln_last = kiln_cells[-1] #获取回转窑最后一个单元
-            # 这里可以添加出料值的处理逻辑
-            # 例如：存储到结果变量中或输出到文件
-            pass
-    
 #五、核心变量获取方法
     def _get_core_variables(self):
         # 获取全局核心微分变量用于收敛判断
@@ -2956,7 +2784,8 @@ class CementProductionModel:
             'gas_temperature': self.variables['algebraic_variables']['Tg'],
             'solid_temperature': self.variables['algebraic_variables']['Ts'],  # 区分气固温度
             'main_concentration': [cell['state_variables']['C']['CaCO3'] for cell in self.cells],  # 主物料浓度:以CaCO3为例
-            'internal_energy': self.variables['state_variables']['U_hat'] #单位体积内能
+            'internal_energy_g': self.variables['state_variables']['U_g'], # 气体内能
+            'internal_energy_s': self.variables['state_variables']['U_s']  # 固体内能
         }
         return core_vars
   
@@ -3007,9 +2836,9 @@ class CementProductionModel:
             P = algebraic_vars.get('P', 0.0)
             CaCO3 = state_vars['C'].get('CaCO3', 0.0)
             CO2 = state_vars['C'].get('CO2', 0.0)
-            U_hat = state_vars.get('U_hat', 0.0)
-            U_s = algebraic_vars.get('U_s', 0.0)
-            U_g = algebraic_vars.get('U_g', 0.0)
+            U_g = state_vars.get('U_g', 0.0)
+            U_s = state_vars.get('U_s', 0.0)
+            U_hat = U_g + U_s
             
             # 中间变量
             vg = algebraic_vars.get('vg', 0.0)
@@ -3163,11 +2992,8 @@ def main():
     # 三段工艺差异化参数化配置
     model.configure_sections()
     
-    # 有限体积空间离散
+    # 有限体积空间离散和初始化
     model.spatial_discretization()
-    
-    # 初始进料设置，确保第一个单元有正确的初始值
-    model._feed_preheater_inlet()
     
     # 【调试】打印进料后第一个单元的浓度
     if model.cells:
