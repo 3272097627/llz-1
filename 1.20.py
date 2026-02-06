@@ -126,7 +126,8 @@ class CementProductionModel:
                 'thermal_conductivity': 0.1,  # W/(m·K)
                 'molar_mass': 12.011,  # g/mol
                 'viscosity': 1e-5,     # Pa·s
-                'diffusion_volume': 15.9   # cm³
+                'diffusion_volume': 15.9,   # cm³
+                'density': 1.4 * 1e6
             },
             'H2O': {
                 'thermal_conductivity': 95.877 * 1e-3,  # 10⁻³ W/(K·m)
@@ -320,7 +321,7 @@ class CementProductionModel:
         self.control_variables['gas_feed'] = {
             'temperature': 1300,  # K
             'total_rate': 1.0,  # 总风量，mol/s
-            'initial_velocity': 5.2,  # 初始风速，m/s
+            'initial_velocity': 4.7,  # 初始风速，m/s
             'composition': {
                 'O2': 0.18,  # 摩尔分数
                 'N2': 0.60,
@@ -604,7 +605,13 @@ class CementProductionModel:
                 conc = segment_C.get(comp, 0.0)
                 n_i = self.formula_57_gas(V_delta, conc)
                 n_g_list.append(n_i)
-                gas_moles_dict[comp] = n_i 
+                # 体积计算分类逻辑
+                if comp == 'C_sus':
+                    # 悬浮碳虽然在气体组分列表中(gas_comps)，但在计算体积时归为固体
+                    solid_moles_dict[comp] = n_i
+                else:
+                    # 真实气体分子，用于计算气体体积
+                    gas_moles_dict[comp] = n_i 
                 
                 Hf = self.constants['standard_enthalpy'].get(comp, 0.0)
                 Hf_g_list.append(Hf)
@@ -629,6 +636,14 @@ class CementProductionModel:
             solid_M = {c: self.constants['solid_properties'][c]['molar_mass'] for c in solid_comps if c in self.constants['solid_properties']}
             solid_rho = {c: self.constants['solid_properties'][c]['density'] for c in solid_comps if c in self.constants['solid_properties']}
             
+            #  C_sus 的物理属性
+            if 'C_sus' in solid_moles_dict:
+                 # 从 gas_properties 获取
+                 if 'C_sus' in self.constants['gas_properties']:
+                     props = self.constants['gas_properties']['C_sus']
+                     solid_M['C_sus'] = props['molar_mass']
+                     solid_rho['C_sus'] = props['density']
+
             # 计算固体体积 (公式8)
             V_s = self.formula_8(solid_M, solid_rho, solid_moles_dict)
             
@@ -1743,6 +1758,12 @@ class CementProductionModel:
         solid_M = {c: self.constants['solid_properties'][c]['molar_mass'] for c in solid_components}
         solid_rho = {c: self.constants['solid_properties'][c]['density'] for c in solid_components}
         
+        # C_sus 的物理属性
+        if 'C_sus' in self.constants['gas_properties']:
+             props = self.constants['gas_properties']['C_sus']
+             solid_M['C_sus'] = props['molar_mass']
+             solid_rho['C_sus'] = props['density']
+
         # 获取当前固体摩尔数 
         current_C = cell['state_variables']['C']
         V_delta = self.formula_58(A_t, cell['delta_z']) # 单段总体积
@@ -1754,6 +1775,12 @@ class CementProductionModel:
             n_i = self.formula_57(V_delta, conc)
             solid_moles[comp] = n_i
             
+        # 悬浮碳 C_sus (虽然在 gas_components 中，但计算几何体积时归为固体)
+        if 'C_sus' in current_C:
+            conc = current_C['C_sus']
+            n_i = self.formula_57(V_delta, conc) # 使用同样的摩尔数公式
+            solid_moles['C_sus'] = n_i
+
         # 计算固体总体积 Vs
         V_s = self.formula_8(solid_M, solid_rho, solid_moles)
         
@@ -1939,16 +1966,17 @@ class CementProductionModel:
         algebraic_vars['N_s'] = N_i_s_list # 存储以供微分求解复用
 
         # 计算气体总摩尔浓度：输入(浓度字典)，输出(气体总摩尔浓度)
-        gas_C_dict = {k: C.get(k, 0.0) for k in gas_components}
-        cg = self.formula_77(gas_C_dict)
+        real_gas_components = [c for c in gas_components if c != 'C_sus']
+        real_gas_C_dict = {k: C.get(k, 0.0) for k in real_gas_components}
+        cg_real = self.formula_77(real_gas_C_dict)
         
         # 计算气体各组分摩尔分数（公式61）
-        xj = [] #初始化摩尔分数列表
-        for component in gas_components: #初始化摩尔分数列表
+        xj_real = [] #初始化摩尔分数列表
+        for component in real_gas_components: #初始化摩尔分数列表
             C_i_g_t = C[component] #读取该组分的浓度
             # 计算摩尔分数：输入(组分浓度, 总摩尔浓度)，输出(摩尔分数)
-            x_i = self.formula_61(C_i_g_t, cg)
-            xj.append(x_i) #将摩尔分数添加到xj列表
+            x_i = self.formula_61(C_i_g_t, cg_real)
+            xj_real.append(x_i) #将摩尔分数添加到xj列表
 
         # 计算气体组分通量（公式21）
         N_i_g_list = []
@@ -1971,9 +1999,13 @@ class CementProductionModel:
                 # C_sus 视为悬浮颗粒，使用纯对流公式 (formula_25)
                 N_i = self.formula_25(vg, C_i_g)
             else:
-                # 常规气体使用对流+扩散公式 (formula_21)
+                # 常规气体使用对流+扩散公式 (formula_21)，使用真实气体组分列表和摩尔分数
                 # formula_21 内部会调用 formula_22 计算有效扩散系数
-                N_i = self.formula_21(vg, C_i_g, Tg, P, gas_components, xj, dC_i_g_dz, i)
+                if component in real_gas_components:
+                    real_index = real_gas_components.index(component)
+                    # 传入 real_gas_components, xj_real, real_index 计算有效扩散系数
+                    N_i = self.formula_21(vg, C_i_g, Tg, P, real_gas_components, xj_real, dC_i_g_dz, real_index)
+
             N_i_g_list.append(N_i) 
         algebraic_vars['N_g'] = N_i_g_list # 存储以供微分求解复用
             
@@ -2113,13 +2145,13 @@ class CementProductionModel:
             solid_moles[comp] = n_i
             
             # 累加总焓：H = Σ (n_i * h_i)
-            # h_i_s[idx] 为该组分的摩尔焓
             H_s += n_i * h_i_s[idx]
 
         # 2. 计算气体总焓 Hg
         H_g = 0.0
         gas_moles = {} # 构建摩尔数字典，供后续体积公式使用
-        
+        real_gas_moles = {}
+
         # 遍历气体组分，复用 Part 3 计算好的 h_i_g
         for idx, comp in enumerate(gas_components):
             conc = C.get(comp, 0.0)
@@ -2129,8 +2161,15 @@ class CementProductionModel:
             gas_moles[comp] = n_i
             
             # 累加总焓：H = Σ (n_i * h_i)
-            # h_i_g[idx] 为该组分的摩尔焓
             H_g += n_i * h_i_g[idx]
+
+            # 体积计算分流逻辑
+            if comp == 'C_sus':
+                # C_sus 归入固体体积计算
+                solid_moles[comp] = n_i
+            else:
+                # 真实气体归入气体体积计算
+                real_gas_moles[comp] = n_i
         
         # 计算单位体积焓：输入(总焓, 单段总体积)，输出(单位体积焓)
         H_hat_s = self.formula_63(H_s, V_delta)
@@ -2139,12 +2178,18 @@ class CementProductionModel:
         H_hat_g = self.formula_64(H_g, V_delta)
         
         # 计算气体体积：输入(气体常数, 温度, 压力, 气体组分摩尔数)，输出(气体体积)
-        V_g = self.formula_7(self.constants['R'], Tg, P, gas_moles)
+        V_g = self.formula_7(self.constants['R'], Tg, P, real_gas_moles)
         
         # 调取固体体积所需参数
         solid_molar_mass = {comp: self.constants['solid_properties'][comp]['molar_mass'] for comp in solid_components if comp in self.constants['solid_properties']}
         solid_density = {comp: self.constants['solid_properties'][comp]['density'] for comp in solid_components if comp in self.constants['solid_properties']}
         
+        # 补充 C_sus 属性
+        if 'C_sus' in self.constants['gas_properties']:
+             props = self.constants['gas_properties']['C_sus']
+             solid_molar_mass['C_sus'] = props['molar_mass']
+             solid_density['C_sus'] = props['density']
+                                                
         # 计算固体体积：输入(固体组分摩尔质量, 固体组分密度, 固体组分摩尔数)，输出(固体体积)
         V_s = self.formula_8(solid_molar_mass, solid_density, solid_moles)
         
@@ -2372,12 +2417,13 @@ class CementProductionModel:
         
         # --- 3.3 计算辐射与对流中间变量 ---
         # 计算气体总摩尔浓度 cg
-        gas_C_dict = {k: C.get(k, 0.0) for k in gas_components}
-        cg = self.formula_77(gas_C_dict)
+        real_gas_components = [c for c in gas_components if c != 'C_sus']
+        real_gas_C_dict = {k: C.get(k, 0.0) for k in real_gas_components}
+        cg_real = self.formula_77(real_gas_C_dict)
         
         # 计算摩尔分数 (防止 cg=0 除零错误)
-        xH2O = C.get('H2O', 0.0) / cg if cg > 1e-12 else 0.0
-        xCO2 = C.get('CO2', 0.0) / cg if cg > 1e-12 else 0.0
+        xH2O = C.get('H2O', 0.0) / cg_real if cg_real > 1e-12 else 0.0
+        xCO2 = C.get('CO2', 0.0) / cg_real if cg_real > 1e-12 else 0.0
         
         # 计算气体发射率 epsilon_g (公式53)
         epsilon_g = self.formula_53(Tg, P, xH2O, xCO2, r_c)
@@ -2436,6 +2482,99 @@ class CementProductionModel:
                 Q_s_prev = prev_alg['Q_tilde_s']
             if 'Q_tilde_g' in prev_alg:
                 Q_g_prev = prev_alg['Q_tilde_g']
+            
+        else:
+            # === 情况 B: 入口边界 (i=0)，必须重新计算进料焓通量 ===
+            # 1. 准备基础热力学参数
+            T0 = self.constants['T0']
+            T_solid_in = self.control_variables['solid_feed']['temperature']
+            T_gas_in = self.control_variables['gas_feed']['temperature']
+            
+            # 获取进料配置
+            solid_feed = self.control_variables['solid_feed']
+            gas_feed = self.control_variables['gas_feed']
+            fuel_feed = self.control_variables['fuel']
+            
+            # --- 2. 计算固体入口焓通量 H_s_prev ---
+            # H_in = Σ (N_in * h(T_in))
+            for component in solid_components:
+                # [2.1] 重算该组分的入口物质通量 (N_in)
+                # A. 生料贡献
+                mass_frac_feed = solid_feed['composition'].get(component, 0.0)
+                rate_feed = solid_feed['total_rate'] * mass_frac_feed
+                
+                # B. 燃料贡献
+                mass_frac_fuel = fuel_feed['composition'].get(component, 0.0)
+                rate_fuel = fuel_feed['rate'] * mass_frac_fuel
+                
+                # C. 总质量流率并转换为摩尔通量
+                total_mass_rate = rate_feed + rate_fuel
+                if total_mass_rate > 0:
+                    molar_mass = self.constants['solid_properties'][component]['molar_mass']
+                    # 调用公式56: 质量流率 -> 摩尔流率
+                    n_dot_in = self.formula_56(total_mass_rate, molar_mass)
+                    # 通量 = 流率 / 截面积
+                    N_in = n_dot_in / A_t
+                    
+                    # [2.2] 计算该组分在进料温度下的摩尔焓 h_i(T_in)
+                    # 获取标准生成焓
+                    Hf = self.constants['standard_enthalpy'].get(component, 0.0)
+                    
+                    # 计算积分焓 
+                    if component in self.constants['molar_heat_capacity']:
+                        coeffs = self.constants['molar_heat_capacity'][component]
+                        int_h = self.formula_5(coeffs['C0'], coeffs['C1'], coeffs['C2'], T0, T_solid_in)
+                    else:
+                        int_h = 0.0
+                    
+                    # 调用公式50: 计算总摩尔焓
+                    h_i_in = self.formula_50(Hf, int_h)
+                    
+                    # [2.3] 累加到总焓通量
+                    H_s_prev += N_in * h_i_in
+
+            # --- 3. 计算气体入口焓通量 H_g_prev ---
+            for component in gas_components:
+                # [3.1] 重算该组分的入口物质通量 (N_in)
+                # A. 气体进料贡献
+                mole_frac_gas = gas_feed['composition'].get(component, 0.0)
+                rate_from_gas = gas_feed['total_rate'] * mole_frac_gas
+                
+                # B. 燃料挥发分贡献
+                mass_frac_fuel = fuel_feed['composition'].get(component, 0.0)
+                if mass_frac_fuel > 0:
+                    # 获取摩尔质量
+                    if component in self.constants['gas_properties']:
+                        mm = self.constants['gas_properties'][component]['molar_mass']
+                    else:
+                        mm = self.constants['solid_properties'].get(component, {}).get('molar_mass', 1.0)
+                    
+                    # 质量流率 -> 摩尔流率
+                    rate_from_fuel = self.formula_56(fuel_feed['rate'] * mass_frac_fuel, mm)
+                else:
+                    rate_from_fuel = 0.0
+                
+                # C. 总入口摩尔通量
+                N_in = (rate_from_gas + rate_from_fuel) / A_t
+                
+                # [3.2] 计算该组分在进料温度下的摩尔焓 h_i(T_in)
+                if N_in > 0:
+                    Hf = self.constants['standard_enthalpy'].get(component, 0.0)
+                    
+                    # 计算积分焓
+                    if component in self.constants['molar_heat_capacity']:
+                        coeffs = self.constants['molar_heat_capacity'][component]
+                        int_h = self.formula_5(coeffs['C0'], coeffs['C1'], coeffs['C2'], T0, T_gas_in)
+
+                    # 调用公式50
+                    h_i_in = self.formula_50(Hf, int_h)
+                    
+                    # [3.3] 累加到总焓通量
+                    H_g_prev += N_in * h_i_in
+
+            # --- 4. 热传导边界条件 ---
+            Q_s_prev = 0.0 
+            Q_g_prev = 0.0
 
         # --- 3.6 能量方程求解 ---
         dU_dt_total = 0.0
@@ -2446,15 +2585,7 @@ class CementProductionModel:
         if energy_eq is None:
             # === 预热器：纯输运模式 (无能量方程配置) ===
             # 公式: dU/dt = -dH/dz
-            # 获取前一单元焓通量
-            H_s_prev = algebraic_vars.get('H_tilde_s', 0.0)
-            H_g_prev = algebraic_vars.get('H_tilde_g', 0.0)
-            
-            if index > 0:
-                prev_alg = self.cells[index-1]['algebraic_variables']
-                H_s_prev = prev_alg.get('H_tilde_s', H_s_prev)
-                H_g_prev = prev_alg.get('H_tilde_g', H_g_prev)
-            
+
             # 当前单元焓通量
             H_s_curr = algebraic_vars.get('H_tilde_s', 0.0)
             H_g_curr = algebraic_vars.get('H_tilde_g', 0.0)
@@ -2490,7 +2621,6 @@ class CementProductionModel:
         else:
             # === 分解炉：单方程总能量求解 (修正分配逻辑) ===
             # 1. 计算总能量变化率 (公式42)
-            # 注意：公式42原定义中 Qgsrad/Qgscv 为内部交换项，在总能方程中相互抵消，故传0
             dU_dt_total = self.formula_42(
                 H_tilde_s, H_tilde_g, Q_tilde_g,  
                 H_s_prev, H_g_prev, Q_g_prev,
@@ -2632,8 +2762,9 @@ class CementProductionModel:
 # 一、压力求解和更新
         
         # 计算气体总摩尔浓度
-        gas_C_dict = {k: state_vars['C'].get(k, 0.0) for k in gas_components}
-        gas_total_concentration = self.formula_77(gas_C_dict)
+        real_gas_components = [c for c in gas_components if c != 'C_sus']
+        real_gas_C_dict = {k: state_vars['C'].get(k, 0.0) for k in real_gas_components}
+        gas_total_concentration = self.formula_77(real_gas_C_dict)
         
         # 使用理想气体状态方程 P = C * R * T 计算新压力
         if gas_total_concentration > 1e-10:
