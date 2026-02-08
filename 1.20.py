@@ -210,17 +210,17 @@ class CementProductionModel:
         
         # 反应速率系数
         self.constants['reaction_rate_coefficients'] = {
-            'r1': {'kr': 1e6 , 'n': 0, 'EA': 175.7 * 1000 , 'alpha1': 1, 'alpha2': 0, 'alpha3': 0, 'beta2': 0, 'unit': 'g/(m³·s)'},
-            'r2': {'kr': 1e5 , 'n': 0, 'EA': 240 * 1000 , 'alpha1': 2, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'g/(m³·s)'},  # 从1e7提升到1e9
-            'r3': {'kr': 1e7 , 'n': 0, 'EA': 420 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'g/(m³·s)'},  # 从1e9提升到1e10
-            'r4': {'kr': 1e6  , 'n': 0, 'EA': 310 * 1000 , 'alpha1': 3, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'g/(m³·s)'},   # 从1e8提升到1e9
-            'r5': {'kr': 1e6 , 'n': 0, 'EA': 330 * 1000 , 'alpha1': 4, 'alpha2': 1, 'alpha3': 1, 'beta2': 0, 'unit': 'g/(m³·s)'},   # 从1e8提升到1e9
+            'r1': {'kr': 1e8 , 'n': 0, 'EA': 175.7 * 1000 , 'alpha1': 1, 'alpha2': 0, 'alpha3': 0, 'beta2': 0, 'unit': 'g/(m³·s)'},
+            'r2': {'kr': 1e9 , 'n': 0, 'EA': 240 * 1000 , 'alpha1': 2, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'g/(m³·s)'},  # 从1e7提升到1e9
+            'r3': {'kr': 1e15 , 'n': 0, 'EA': 420 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'g/(m³·s)'},  # 从1e9提升到1e10
+            'r4': {'kr': 1e12  , 'n': 0, 'EA': 310 * 1000 , 'alpha1': 3, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'g/(m³·s)'},   # 从1e8提升到1e9
+            'r5': {'kr': 1e13 , 'n': 0, 'EA': 330 * 1000 , 'alpha1': 4, 'alpha2': 1, 'alpha3': 1, 'beta2': 0, 'unit': 'g/(m³·s)'},   # 从1e8提升到1e9
             'r6': {'kr': 7.0e4, 'n': 0, 'EA': 66.5 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
             'r7': {'kr': 2.8e6, 'n': 0, 'EA': 83.7 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
-            'r8': {'kr': 1.4e6, 'n': 0.5, 'EA': 295.5 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
+            'r8': {'kr': 1.4e10, 'n': 0.5, 'EA': 295.5 * 1000 , 'alpha1': 1, 'alpha2': 1, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
             'r9': {'kr': 8.8e11, 'n': 0, 'EA': 239 * 1000 , 'alpha1': 0.5, 'alpha2': 0.5, 'alpha3': 0, 'beta2': 0, 'unit': 'mol/(m³·s)'},
-            'r10': {'kr': 2.6e8, 'n': 0, 'EA': 237 * 1000 , 'alpha1': 0, 'alpha2': 0, 'alpha3': 0, 'beta2': 0.6, 'unit': 's⁻¹'},
-            'r11': {'kr': 3.1e6, 'n': 0, 'EA': 215 * 1000 , 'alpha1': 0, 'alpha2': 0, 'alpha3': 0, 'beta2': 0.4, 'unit': 's⁻¹'}
+            'r10': {'kr': 2.6e9, 'n': 0, 'EA': 237 * 1000 , 'alpha1': 0, 'alpha2': 0, 'alpha3': 0, 'beta2': 0.6, 'unit': 's⁻¹'},
+            'r11': {'kr': 3.1e7, 'n': 0, 'EA': 215 * 1000 , 'alpha1': 0, 'alpha2': 0, 'alpha3': 0, 'beta2': 0.4, 'unit': 's⁻¹'}
         }
         
         # 化学反应式
